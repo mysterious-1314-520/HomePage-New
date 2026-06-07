@@ -1,0 +1,3 @@
+https://littlecold.cn/littleclicker/banner/littleapi.png|https://api.littlecold.cn
+https://littlecold.cn/littleclicker/banner/opensource.png|https://github.com/hanbao233xD/LittleClicker
+https://littlecold.cn/littleclicker/banner/qqgroup.png|https://qm.qq.com/q/6jr9e5HOkE
