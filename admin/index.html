@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>后台管理 - 计堡主页</title>
+<style>
+:root {
+  --primary: #4f6ef7;
+  --primary-light: #eef1ff;
+  --bg: #f4f5f9;
+  --card: #fff;
+  --text: #1e1e2e;
+  --text-secondary: #6b7280;
+  --border: #e5e7eb;
+  --danger: #ef4444;
+  --success: #22c55e;
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-lg: 0 4px 12px rgba(0,0,0,.08);
+  --sidebar-w: 220px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+.sidebar { width: var(--sidebar-w); background: var(--card); border-right: 1px solid var(--border); padding: 24px 0; position: fixed; top: 0; left: 0; bottom: 0; overflow-y: auto; z-index: 10; display: flex; flex-direction: column; }
+.sidebar-logo { padding: 0 20px 24px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+.sidebar-logo h2 { font-size: 17px; font-weight: 700; color: var(--text); }
+.sidebar-logo span { font-size: 12px; color: var(--text-secondary); }
+.sidebar-nav { flex: 1; padding: 8px; }
+.sidebar-nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 8px; cursor: pointer; font-size: 14px; color: var(--text-secondary); transition: all .15s; margin-bottom: 2px; border: none; background: none; width: 100%; text-align: left; }
+.sidebar-nav-item:hover { background: var(--primary-light); color: var(--primary); }
+.sidebar-nav-item.active { background: var(--primary); color: #fff; font-weight: 600; }
+.sidebar-nav-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+.sidebar-footer { padding: 16px 20px; border-top: 1px solid var(--border); }
+.sidebar-footer a { font-size: 13px; color: var(--text-secondary); text-decoration: none; display: flex; align-items: center; gap: 6px; }
+.sidebar-footer a:hover { color: var(--primary); }
+.main { margin-left: var(--sidebar-w); flex: 1; padding: 28px 32px 60px; max-width: 960px; }
+.page-header { margin-bottom: 24px; }
+.page-header h1 { font-size: 22px; font-weight: 700; }
+.page-header p { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+.section { display: none; }
+.section.active { display: block; animation: fadeIn .25s; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.card { background: var(--card); border-radius: var(--radius); padding: 22px 24px; margin-bottom: 18px; box-shadow: var(--shadow); }
+.card-header { font-size: 15px; font-weight: 600; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-grid.full { grid-template-columns: 1fr; }
+.form-group { display: flex; flex-direction: column; gap: 4px; }
+.form-group label { font-size: 13px; font-weight: 500; color: var(--text-secondary); }
+.form-group input, .form-group textarea, .form-group select { padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 7px; font-size: 14px; font-family: inherit; color: var(--text); background: #fafbfc; transition: border-color .15s, box-shadow .15s; }
+.code-editor { width: 100%; min-height: 200px; padding: 14px; border: 1.5px solid var(--border); border-radius: 7px; font-size: 13px; font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; color: var(--text); background: #1e1e2e; color: #cdd6f4; resize: vertical; box-sizing: border-box; tab-size: 2; line-height: 1.6; }
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); outline: none; background: #fff; }
+.form-group textarea { min-height: 80px; resize: vertical; line-height: 1.5; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: 7px; border: none; cursor: pointer; font-size: 13px; font-weight: 500; transition: all .15s; }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: #3d5de7; box-shadow: var(--shadow-lg); }
+.btn-outline { background: #fff; color: var(--text-secondary); border: 1.5px solid var(--border); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.btn-danger { background: #fef2f2; color: var(--danger); border: 1.5px solid #fecaca; }
+.btn-danger:hover { background: #fee2e2; }
+.btn-sm { padding: 5px 10px; font-size: 12px; }
+.btn-group { display: flex; gap: 8px; margin-top: 16px; }
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th { text-align: left; font-size: 12px; font-weight: 600; color: var(--text-secondary); padding: 10px 12px; border-bottom: 1.5px solid var(--border); text-transform: uppercase; letter-spacing: .5px; }
+.data-table td { padding: 10px 12px; font-size: 13px; border-bottom: 1px solid #f3f4f6; }
+.data-table tr:hover td { background: #f9fafb; }
+.data-table input, .data-table select { padding: 6px 10px; border: 1.5px solid var(--border); border-radius: 6px; font-size: 13px; font-family: inherit; width: 100%; background: #fafbfc; }
+.data-table input:focus, .data-table select:focus { border-color: var(--primary); outline: none; }
+.data-table .col-actions { width: 140px; text-align: right; }
+.data-table .col-actions .btn { display: inline-flex; }
+.badge { display:inline-block; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:500; }
+.badge-green { background:#d4fcdf; color:#1a7a3a; }
+.badge-yellow { background:#fef3c7; color:#b45309; }
+.badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+.badge-success { background: #dcfce7; color: #16a34a; }
+.badge-muted { background: #f3f4f6; color: #9ca3af; }
+.checkbox-wrap { display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; }
+.checkbox-wrap input[type=checkbox] { width: auto; accent-color: var(--primary); }
+.hamburger { display: none; position: fixed; top: 12px; left: 12px; z-index: 30; width: 40px; height: 40px; border-radius: 8px; border: none; background: var(--card); box-shadow: var(--shadow-lg); cursor: pointer; align-items: center; justify-content: center; }
+.hamburger span { display: block; width: 18px; height: 2px; background: var(--text); border-radius: 2px; position: relative; transition: .2s; }
+.hamburger span::before, .hamburger span::after { content: ''; position: absolute; left: 0; width: 18px; height: 2px; background: var(--text); border-radius: 2px; transition: .2s; }
+.hamburger span::before { top: -6px; }
+.hamburger span::after { top: 6px; }
+.hamburger.open span { background: transparent; }
+.hamburger.open span::before { top: 0; transform: rotate(45deg); }
+.hamburger.open span::after { top: 0; transform: rotate(-45deg); }
+.sidebar-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 9; }
+.toast-container { position: fixed; top: 24px; right: 24px; z-index: 999; display: flex; flex-direction: column; gap: 8px; }
+.toast { padding: 11px 18px; border-radius: 8px; color: #fff; font-size: 13px; font-weight: 500; box-shadow: var(--shadow-lg); animation: slideIn .25s; }
+.toast.success { background: var(--success); }
+.toast.error { background: var(--danger); }
+@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.mobile-only { display: none; }
+.login-overlay {
+  display: flex;
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-size: cover;
+  background-position: center;
+  transition: background 0.5s ease;
+}
+.login-overlay.has-bg {
+  background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4));
+  background-size: cover;
+  background-position: center;
+}
+.login-overlay.has-bg::before {
+  display: none;
+}
+.login-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,208C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"/></svg>') no-repeat center;
+  background-size: cover;
+  opacity: 0.3;
+  pointer-events: none;
+}
+.login-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 24px;
+  padding: 44px 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  animation: loginSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes loginSlideUp {
+  from { opacity: 0; transform: translateY(40px) scale(0.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.login-card .login-icon {
+  width: 72px;
+  height: 72px;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+.login-card .login-icon svg {
+  width: 36px;
+  height: 36px;
+  color: #fff;
+}
+.login-card h2 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.login-card p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 32px;
+}
+.login-card .form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+.login-card .form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 8px;
+}
+.login-card .form-group input {
+  width: 100%;
+  padding: 14px 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 14px;
+  font-size: 15px;
+  transition: all 0.3s;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  backdrop-filter: blur(10px);
+}
+.login-card .form-group input:focus {
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+  outline: none;
+  background: rgba(255, 255, 255, 0.25);
+}
+.login-card .form-group input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+.login-card .btn {
+  width: 100%;
+  justify-content: center;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 12px;
+}
+.login-card .btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+.login-card .btn:active {
+  transform: translateY(0);
+}
+#loginError {
+  color: #fff;
+  font-size: 13px;
+  margin-top: 16px;
+  display: none;
+  padding: 10px 14px;
+  background: rgba(239, 68, 68, 0.3);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+.app-hidden { display: none !important; }
+@media (max-width: 1024px) {
+  .main { padding: 28px 24px 60px; max-width: 100%; }
+  .login-card {
+    max-width: 380px;
+  }
+}
+@media (max-width: 768px) {
+  .hamburger { display: flex; }
+  .sidebar { transform: translateX(-100%); transition: transform .25s cubic-bezier(.4,0,.2,1); width: 240px; }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-backdrop.show { display: block; }
+  .main { margin-left: 0; padding: 60px 16px 40px; max-width: 100%; }
+  .form-grid { grid-template-columns: 1fr; }
+  .mobile-only { display: block; }
+  .mobile-hidden { display: none; }
+  .card { padding: 16px; }
+  .btn { padding: 10px 16px; font-size: 14px; }
+  .btn-sm { padding: 6px 12px; font-size: 13px; }
+  .data-table { font-size: 12px; }
+  .data-table td, .data-table th { padding: 8px 6px; white-space: nowrap; }
+  .data-table input, .data-table select { font-size: 16px; padding: 8px; }
+  .toast-container { top: 16px; right: 12px; left: 12px; }
+  .toast { font-size: 14px; text-align: center; }
+  .modal { width: 90vw; max-width: 380px; }
+  .login-card {
+    padding: 32px 24px;
+    border-radius: 20px;
+    max-width: 100%;
+  }
+  .login-card .login-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+  }
+  .login-card .login-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+  .login-card h2 {
+    font-size: 22px;
+  }
+  .login-card p {
+    font-size: 13px;
+    margin-bottom: 24px;
+  }
+  .login-card .form-group input {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+  .login-card .btn {
+    padding: 14px;
+    font-size: 15px;
+  }
+}
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 100; align-items: center; justify-content: center; }
+.modal-overlay.show { display: flex; }
+.modal { background: var(--card); border-radius: 12px; padding: 28px 24px; width: 400px; max-width: 90vw; box-shadow: 0 20px 60px rgba(0,0,0,.2); animation: fadeIn .2s; }
+.modal h3 { margin: 0 0 20px; font-size: 16px; }
+.modal .form-group { margin-bottom: 14px; }
+.modal .form-group label { display: block; margin-bottom: 6px; font-size: 13px; color: var(--text-secondary); }
+.modal .form-group input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 7px; font-size: 14px; box-sizing: border-box; }
+.modal .form-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); outline: none; background: #fff; }
+.modal .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
+.modal textarea { width: 100%; min-height: 80px; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 7px; font-size: 14px; resize: vertical; font-family: inherit; background: #fafbfc; box-sizing: border-box; }
+.modal textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); outline: none; background: #fff; }
+.modal select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); outline: none; }
+</style>
+</head>
+<body>
+
+<!-- Login page -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-card">
+    <div class="login-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+      </svg>
+    </div>
+    <h2>欢迎回来</h2>
+    <p>请输入管理员密码登录后台</p>
+    <div class="form-group"><label>密码</label><input type="password" id="loginPassword" placeholder="输入密码" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <button class="btn btn-primary" onclick="doLogin()">登录</button>
+    <div id="loginError"></div>
+  </div>
+</div>
+
+<button class="hamburger" id="hamburger" onclick="toggleSidebar()"><span></span></button>
+<div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()"></div>
+
+<!-- Hidden file input for uploads -->
+<input type="file" id="uploadInput" accept="image/*" style="display:none" onchange="handleUpload(this)">
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <h2>计堡主页</h2>
+    <span>内容管理系统</span>
+  </div>
+  <nav class="sidebar-nav" id="sidebarNav"></nav>
+  <div class="sidebar-footer">
+    <a href="/" target="_blank" style="margin-bottom:8px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      <span>查看主页</span>
+    </a>
+    <a href="javascript:void(0)" onclick="showChangePwd()" style="margin-bottom:6px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <span>修改密码</span>
+    </a>
+    <a href="javascript:void(0)" onclick="doLogout()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      <span>退出登录</span>
+    </a>
+  </div>
+</aside>
+
+<main class="main" id="mainContent"></main>
+
+<div class="modal-overlay" id="pwdModal" onclick="if(event.target===this)closeChangePwd()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h3>修改管理员密码</h3>
+    <div class="form-group"><label>原密码</label><input type="password" id="pw_old" placeholder="请输入原密码"></div>
+    <div class="form-group"><label>新密码</label><input type="password" id="pw_new" placeholder="至少4位"></div>
+    <div class="form-group"><label>确认新密码</label><input type="password" id="pw_confirm" placeholder="再次输入新密码"></div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeChangePwd()">取消</button>
+      <button class="btn btn-primary" onclick="doChangePwd()">确认修改</button>
+    </div>
+  </div>
+</div>
+
+<!-- Generic modal for confirm / form -->
+<div class="modal-overlay" id="genericModal" onclick="if(event.target===this)hideModal()">
+  <div class="modal" onclick="event.stopPropagation()" id="genericModalInner"></div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+const API = '/api';
+let data = {};
+
+function getToken() { return localStorage.getItem('admin_token') || ''; }
+
+function apiFetch(url, opts) {
+  opts = opts || {};
+  opts.headers = opts.headers || {};
+  opts.headers['X-Admin-Token'] = getToken();
+  if (opts.body && typeof opts.body === 'string' && !opts.headers['Content-Type']) {
+    opts.headers['Content-Type'] = 'application/json';
+  }
+  return fetch(url, opts).then(function(r) {
+    if (r.status === 401) { doLogout(); throw new Error('未登录'); }
+    return r;
+  });
+}
+
+function checkLogin() {
+  var token = getToken();
+  if (!token) { showLogin(); return; }
+  apiFetch(API + '/admin-check').then(function(r) { return r.json(); }).then(function(j) {
+    if (j.code !== 200) { showLogin(); }
+    else { hideLogin(); loadData(); }
+  }).catch(function() { showLogin(); });
+}
+
+function showLogin() {
+  document.getElementById('loginOverlay').classList.remove('app-hidden');
+  document.getElementById('sidebar').classList.add('app-hidden');
+  document.getElementById('mainContent').classList.add('app-hidden');
+  document.getElementById('hamburger').classList.add('app-hidden');
+  localStorage.removeItem('admin_token');
+  document.getElementById('loginError').style.display = 'none';
+  document.getElementById('loginPassword').value = '';
+  loadLoginBg();
+}
+
+function loadLoginBg() {
+  fetch(API + '/homepage-data').then(function(r) { return r.json(); }).then(function(j) {
+    if (j.code === 200 && j.data && j.data.config) {
+      var bgUrl = j.data.config.login_bg_url || '';
+      var overlay = document.getElementById('loginOverlay');
+      if (bgUrl) {
+        overlay.style.backgroundImage = 'linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(' + bgUrl + ')';
+        overlay.classList.add('has-bg');
+      } else {
+        overlay.style.backgroundImage = '';
+        overlay.classList.remove('has-bg');
+      }
+    }
+  }).catch(function(e) { console.error('Failed to load login bg:', e); });
+}
+
+function hideLogin() {
+  document.getElementById('loginOverlay').classList.add('app-hidden');
+  document.getElementById('sidebar').classList.remove('app-hidden');
+  document.getElementById('mainContent').classList.remove('app-hidden');
+  document.getElementById('hamburger').classList.remove('app-hidden');
+}
+
+function doLogin() {
+  var pwd = document.getElementById('loginPassword').value;
+  if (!pwd) return;
+  var errEl = document.getElementById('loginError');
+  apiFetch(API + '/admin-login', { method: 'POST', body: JSON.stringify({ password: pwd }) })
+    .then(function(r) { return r.json(); })
+    .then(function(j) {
+      if (j.code === 200) { localStorage.setItem('admin_token', j.data.token); hideLogin(); loadData(); }
+      else { errEl.textContent = j.msg; errEl.style.display = 'block'; }
+    }).catch(function() { errEl.textContent = '网络错误'; errEl.style.display = 'block'; });
+}
+
+function doLogout() {
+  localStorage.removeItem('admin_token');
+  showLogin();
+}
+
+function showChangePwd() {
+  document.getElementById('pwdModal').classList.add('show');
+}
+
+function closeChangePwd() {
+  document.getElementById('pwdModal').classList.remove('show');
+}
+
+function doChangePwd() {
+  var oldPw = document.getElementById('pw_old').value;
+  var newPw = document.getElementById('pw_new').value;
+  var confirmPw = document.getElementById('pw_confirm').value;
+  if (!oldPw || !newPw) { toast('请填写密码', 'error'); return; }
+  if (newPw.length < 4) { toast('新密码至少4位', 'error'); return; }
+  if (newPw !== confirmPw) { toast('两次新密码不一致', 'error'); return; }
+  apiFetch(API + '/admin-change-password', { method: 'POST', body: JSON.stringify({ oldPassword: oldPw, newPassword: newPw }) })
+    .then(function(r) { return r.json(); }).then(function(j) {
+      if (j.code === 200) { toast('密码修改成功，请重新登录'); setTimeout(doLogout, 1500); }
+      else toast(j.msg, 'error');
+    });
+}
+
+// ====== 通用弹窗 ======
+function showConfirmModal(title, msg, cb) {
+  document.getElementById('genericModalInner').innerHTML =
+    '<h3>' + esc(title) + '</h3>' +
+    '<div class="form-group"><p style="font-size:14px;line-height:1.6;color:var(--text-secondary);white-space:pre-wrap">' + esc(msg) + '</p></div>' +
+    '<div class="modal-actions">' +
+    '<button class="btn btn-outline" id="modalCancelBtn">取消</button>' +
+    '<button class="btn btn-danger" id="modalOkBtn">确认删除</button>' +
+    '</div>';
+  document.getElementById('genericModal').classList.add('show');
+  document.getElementById('modalCancelBtn').onclick = hideModal;
+  document.getElementById('modalOkBtn').onclick = function() { hideModal(); cb(); };
+}
+
+function showFormModal(title, fields, cb) {
+  var fieldsHtml = fields.map(function(f) {
+    var input;
+    if (f.type === 'select') {
+      input = '<select id="mf_' + f.key + '" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:14px;background:#fafbfc">' +
+        f.options.map(function(o) { return '<option value="' + o.value + '"' + (o.selected ? ' selected' : '') + '>' + esc(o.label) + '</option>'; }).join('') +
+        '</select>';
+    } else if (f.type === 'checkbox') {
+      input = '<label class="checkbox-wrap" style="margin-top:8px"><input type="checkbox" id="mf_' + f.key + '"' + (f.checked ? ' checked' : '') + '> ' + esc(f.checkLabel || '') + '</label>';
+      return '<div class="form-group">' + input + '</div>';
+    } else if (f.type === 'textarea') {
+      input = '<textarea id="mf_' + f.key + '" style="width:100%;min-height:80px;padding:10px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:14px;resize:vertical;font-family:inherit;background:#fafbfc">' + esc(f.value) + '</textarea>';
+    } else {
+      input = '<input id="mf_' + f.key + '" value="' + esc(f.value) + '" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:14px;box-sizing:border-box;background:#fafbfc"' + (f.type === 'url' ? ' type="url"' : '') + '>';
+    }
+    return '<div class="form-group"><label style="display:block;margin-bottom:6px;font-size:13px;color:var(--text-secondary)">' + esc(f.label) + '</label>' + input + '</div>';
+  }).join('');
+  document.getElementById('genericModalInner').innerHTML =
+    '<h3>' + esc(title) + '</h3>' + fieldsHtml +
+    '<div class="modal-actions">' +
+    '<button class="btn btn-outline" id="modalCancelBtn">取消</button>' +
+    '<button class="btn btn-primary" id="modalOkBtn">确认</button>' +
+    '</div>';
+  document.getElementById('genericModal').classList.add('show');
+  document.getElementById('modalCancelBtn').onclick = hideModal;
+  document.getElementById('modalOkBtn').onclick = function() {
+    var data = {};
+    fields.forEach(function(f) {
+      if (f.type === 'checkbox') {
+        data[f.key] = document.getElementById('mf_' + f.key).checked ? 1 : 0;
+      } else {
+        data[f.key] = document.getElementById('mf_' + f.key).value;
+      }
+    });
+    hideModal();
+    cb(data);
+  };
+}
+
+function hideModal() {
+  document.getElementById('genericModal').classList.remove('show');
+}
+
+const sections = [
+  { key: 'config', label: '站点设置', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>' },
+  { key: 'tags', label: '个人标签', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>' },
+  { key: 'timeline', label: '时间线', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' },
+  { key: 'social', label: '社交链接', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' },
+  { key: 'project', label: '项目信息', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/><line x1="12" y1="22" x2="12" y2="15.5"/><polyline points="22 8.5 12 15.5 2 8.5"/></svg>' },
+  { key: 'versions', label: '版本管理', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>' },
+  { key: 'notices', label: '公告管理', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>' },
+  { key: 'music', label: '音乐设置', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>' },
+  { key: 'stats', label: '访问统计', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>' },
+  { key: 'friendlinks', label: '友情链接', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>' },
+  { key: 'skills', label: '技能展示', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>' }
+];
+
+function toast(msg, type) {
+  type = type || 'success';
+  var el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.textContent = msg;
+  document.getElementById('toastContainer').appendChild(el);
+  setTimeout(function() { el.remove(); }, 2500);
+}
+
+async function loadData() {
+  var res = await apiFetch(API + '/homepage-data');
+  var json = await res.json();
+  if (json.code === 200) data = json.data;
+  else { toast('加载失败', 'error'); return; }
+  buildSidebar();
+  showSection('config');
+}
+
+function buildSidebar() {
+  var nav = document.getElementById('sidebarNav');
+  nav.innerHTML = sections.map(function(s) {
+    return '<button class="sidebar-nav-item" onclick="showSection(\'' + s.key + '\')">' + s.icon + '<span>' + s.label + '</span></button>';
+  }).join('');
+}
+
+function showSection(key) {
+  closeSidebar();
+  var items = document.querySelectorAll('.sidebar-nav-item');
+  items.forEach(function(b) {
+    var onclick = b.getAttribute('onclick') || '';
+    b.classList.toggle('active', onclick.indexOf("'" + key + "'") !== -1);
+  });
+  var main = document.getElementById('mainContent');
+  var s = sections.find(function(s) { return s.key === key; });
+  var html = '<div class="page-header"><h1>' + s.label + '</h1></div>';
+  switch (key) {
+    case 'config': html += renderConfig(); break;
+    case 'tags': html += renderTags(); break;
+    case 'timeline': html += renderTimeline(); break;
+    case 'social': html += renderSocial(); break;
+    case 'project': html += renderProject(); break;
+    case 'versions': html += renderVersions(); break;
+    case 'notices': html += renderNotices(); break;
+    case 'music': html += renderMusic(); break;
+    case 'stats': html += renderStats(); break;
+    case 'friendlinks': html += renderFriendLinks(); break;
+    case 'skills': html += renderSkills(); break;
+  }
+  main.innerHTML = html;
+  // Wrap all data tables for mobile horizontal scroll
+  var tables = main.querySelectorAll('.data-table');
+  tables.forEach(function(t) {
+    if (!t.parentElement.classList.contains('table-wrap')) {
+      var wrap = document.createElement('div');
+      wrap.className = 'table-wrap';
+      t.parentNode.insertBefore(wrap, t);
+      wrap.appendChild(t);
+    }
+  });
+}
+
+function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ====== 标签 ======
+function renderTags() {
+  var tags = data.tags || [];
+  var html = '<div class="card"><div class="card-header">个人标签</div>';
+  html += '<table class="data-table"><thead><tr><th style="width:60px">#</th><th>标签内容</th><th class="col-actions">操作</th></tr></thead><tbody id="tagBody">';
+  tags.forEach(function(t, i) {
+    html += '<tr><td>' + (i+1) + '</td><td><input value="' + esc(t.tag) + '" data-idx="' + i + '" class="tag-input"></td>' +
+      '<td class="col-actions"><button class="btn btn-sm btn-outline" onclick="moveTag(' + i + ',-1)">&#8593;</button> ' +
+      '<button class="btn btn-sm btn-outline" onclick="moveTag(' + i + ',1)">&#8595;</button> ' +
+      '<button class="btn btn-sm btn-danger" onclick="removeTag(' + i + ')">删除</button></td></tr>';
+  });
+  html += '</tbody></table>';
+  html += '<div class="btn-group"><button class="btn btn-outline" onclick="addTag()">+ 添加</button><button class="btn btn-primary" onclick="saveTags()">保存全部</button></div>';
+  html += '</div>';
+  return html;
+}
+function addTag() {
+  var tbody = document.getElementById('tagBody');
+  var idx = tbody.children.length;
+  var tr = document.createElement('tr');
+  tr.innerHTML = '<td>' + (idx+1) + '</td><td><input value="" data-idx="' + idx + '" class="tag-input"></td>' +
+    '<td class="col-actions"><button class="btn btn-sm btn-outline" onclick="moveTag(' + idx + ',-1)">&#8593;</button> ' +
+    '<button class="btn btn-sm btn-outline" onclick="moveTag(' + idx + ',1)">&#8595;</button> ' +
+    '<button class="btn btn-sm btn-danger" onclick="removeTag(' + idx + ')">删除</button></td>';
+  tbody.appendChild(tr);
+}
+function removeTag(idx) {
+  var rows = document.querySelectorAll('#tagBody tr');
+  if (rows[idx]) rows[idx].remove();
+  updateTagIndices();
+}
+function moveTag(idx, dir) {
+  var tbody = document.getElementById('tagBody');
+  var rows = tbody.children;
+  var newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= rows.length) return;
+  tbody.insertBefore(rows[newIdx], rows[idx]);
+  updateTagIndices();
+}
+function updateTagIndices() {
+  var rows = document.querySelectorAll('#tagBody tr');
+  rows.forEach(function(r, i) {
+    r.children[0].textContent = i + 1;
+    var input = r.querySelector('.tag-input');
+    if (input) input.setAttribute('data-idx', i);
+    var btns = r.querySelectorAll('button');
+    btns.forEach(function(b) {
+      var oc = b.getAttribute('onclick') || '';
+      b.setAttribute('onclick', oc.replace(/moveTag\(\d+/g, 'moveTag(' + i).replace(/removeTag\(\d+/g, 'removeTag(' + i));
+    });
+  });
+}
+function saveTags() {
+  var inputs = document.querySelectorAll('.tag-input');
+  var tags = [];
+  inputs.forEach(function(inp) { tags.push(inp.value); });
+  apiFetch(API + '/tags', { method: 'PUT', body: JSON.stringify({ tags: tags }) })
+    .then(function(r) { return r.json(); }).then(function(j) { j.code === 200 ? toast('保存成功') : toast('保存失败', 'error'); });
+}
+
+// ====== 时间线 ======
+function renderTimeline() {
+  var tl = data.timeline || [];
+  var html = '<div class="card"><div class="card-header">时间线</div>';
+  html += '<table class="data-table"><thead><tr><th style="width:160px">日期</th><th>内容</th><th style="width:70px">当前</th><th class="col-actions">操作</th></tr></thead><tbody>';
+  tl.forEach(function(t, i) {
+    html += '<tr><td><input value="' + esc(t.date) + '" class="tl-date" data-idx="' + i + '"></td>' +
+      '<td><input value="' + esc(t.content) + '" class="tl-content" data-idx="' + i + '"></td>' +
+      '<td><input type="checkbox" class="tl-current" data-idx="' + i + '"' + (t.is_current ? ' checked' : '') + '></td>' +
+      '<td class="col-actions"><button class="btn btn-sm btn-outline" onclick="moveTimeline(' + i + ',-1)">&#8593;</button> ' +
+      '<button class="btn btn-sm btn-outline" onclick="moveTimeline(' + i + ',1)">&#8595;</button> ' +
+      '<button class="btn btn-sm btn-danger" onclick="removeTimeline(' + i + ')">删除</button></td></tr>';
+  });
+  html += '</tbody></table>';
+  html += '<div class="btn-group"><button class="btn btn-outline" onclick="addTimeline()">+ 添加</button><button class="btn btn-primary" onclick="saveTimeline()">保存全部</button></div>';
+  html += '</div>';
+  return html;
+}
+function addTimeline() {
+  var table = document.querySelector('#mainContent .data-table tbody');
+  var idx = table.children.length;
+  var tr = document.createElement('tr');
+  tr.innerHTML = '<td><input value="" class="tl-date" data-idx="' + idx + '"></td>' +
+    '<td><input value="" class="tl-content" data-idx="' + idx + '"></td>' +
+    '<td><input type="checkbox" class="tl-current" data-idx="' + idx + '"></td>' +
+    '<td class="col-actions"><button class="btn btn-sm btn-outline" onclick="moveTimeline(' + idx + ',-1)">&#8593;</button> ' +
+    '<button class="btn btn-sm btn-outline" onclick="moveTimeline(' + idx + ',1)">&#8595;</button> ' +
+    '<button class="btn btn-sm btn-danger" onclick="removeTimeline(' + idx + ')">删除</button></td>';
+  table.appendChild(tr);
+}
+function removeTimeline(idx) {
+  var rows = document.querySelectorAll('#mainContent .data-table tbody tr');
+  if (rows[idx]) rows[idx].remove();
+}
+function moveTimeline(idx, dir) {
+  var tbody = document.querySelector('#mainContent .data-table tbody');
+  var rows = tbody.children;
+  var newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= rows.length) return;
+  if (dir < 0) tbody.insertBefore(rows[idx], rows[newIdx]);
+  else tbody.insertBefore(rows[newIdx], rows[idx]);
+}
+function saveTimeline() {
+  var dates = document.querySelectorAll('.tl-date');
+  var contents = document.querySelectorAll('.tl-content');
+  var currents = document.querySelectorAll('.tl-current');
+  var items = [];
+  for (var i = 0; i < dates.length; i++) {
+    items.push({ date: dates[i].value, content: contents[i].value, is_current: currents[i].checked ? 1 : 0 });
+  }
+  apiFetch(API + '/timeline', { method: 'PUT', body: JSON.stringify({ items: items }) })
+    .then(function(r) { return r.json(); }).then(function(j) { j.code === 200 ? toast('保存成功') : toast('保存失败', 'error'); });
+}
+
+// ====== 社交链接 ======
+function renderSocial() {
+  var links = data.socialLinks || [];
+  var html = '<div class="card"><div class="card-header">社交链接</div>';
+  html += '<table class="data-table"><thead><tr><th>平台</th><th>链接</th><th>提示文字</th><th>样式</th><th>启用</th><th class="col-actions">操作</th></tr></thead><tbody>';
+  links.forEach(function(l, i) {
+    html += '<tr><td><input value="' + esc(l.platform) + '" data-idx="' + i + '" class="sl-platform"></td>' +
+      '<td><input value="' + esc(l.url) + '" data-idx="' + i + '" class="sl-url"></td>' +
+      '<td><input value="' + esc(l.tip_text||'') + '" data-idx="' + i + '" class="sl-tip"></td>' +
+      '<td><select data-idx="' + i + '" class="sl-style"><option value="iconItemLong"' + (l.display_style==='iconItemLong'?' selected':'') + '>长图标</option><option value="iconItem"' + (l.display_style==='iconItem'?' selected':'') + '>图标</option></select></td>' +
+      '<td><input type="checkbox" data-idx="' + i + '" class="sl-active"' + (l.is_active ? ' checked' : '') + '></td>' +
+      '<td class="col-actions"><button class="btn btn-sm btn-primary" onclick="saveSocialLink(' + l.id + ')">保存</button> ' +
+      '<button class="btn btn-sm btn-danger" onclick="deleteSocialLink(' + l.id + ')">删除</button></td></tr>';
+  });
+  html += '</tbody></table>';
+  html += '<div class="btn-group"><button class="btn btn-outline" onclick="addSocialLink()">+ 添加</button></div>';
+  html += '</div>';
+  return html;
+}
+function addSocialLink() {
+  showFormModal('添加社交链接', [
+    { key: 'platform', label: '平台名称', value: '' },
+    { key: 'url', label: '链接地址', value: 'https://' },
+    { key: 'tip_text', label: '提示文字', value: '' },
+    { key: 'display_style', label: '显示样式', value: 'iconItemLong', type: 'select', options: [{ label: '长图标', value: 'iconItemLong' }, { label: '图标', value: 'iconItem' }] },
+    { key: 'is_active', label: '', type: 'checkbox', checkLabel: '启用', checked: true }
+  ], function(data) {
+    apiFetch(API + '/social-links', { method: 'POST', body: JSON.stringify({ platform:data.platform, url:data.url, tip_text:data.tip_text, display_style:data.display_style, is_active:data.is_active }) })
+      .then(function(r) { return r.json(); }).then(function(j) { if (j.code === 200) { toast('已添加'); loadData(); } });
+  });
+}
+function saveSocialLink(id) {
+  var idx = (data.socialLinks || []).findIndex(function(l) { return l.id === id; });
+  var platform = (document.querySelector('.sl-platform[data-idx="' + idx + '"]') || {}).value || '';
+  var url = (document.querySelector('.sl-url[data-idx="' + idx + '"]') || {}).value || '';
+  var tip_text = (document.querySelector('.sl-tip[data-idx="' + idx + '"]') || {}).value || '';
+  var display_style = (document.querySelector('.sl-style[data-idx="' + idx + '"]') || {}).value || 'iconItemLong';
+  var is_active = (document.querySelector('.sl-active[data-idx="' + idx + '"]') || {}).checked ? 1 : 0;
+  apiFetch(API + '/social-links/' + id, { method: 'PUT', body: JSON.stringify({ platform:platform, url:url, tip_text:tip_text, display_style:display_style, is_active:is_active }) })
+    .then(function(r) { return r.json(); }).then(function(j) { j.code === 200 ? toast('保存成功') : toast('保存失败', 'error'); });
+}
+function deleteSocialLink(id) {
+  showConfirmModal('删除确认', '确定要删除这个社交链接吗？此操作不可撤销。', function() {
+    apiFetch(API + '/social-links/' + id, { method: 'DELETE' }).then(function(r) { return r.json(); }).then(function(j) { if (j.code === 200) { toast('已删除'); loadData(); } });
+  });
+}
+
+// ====== 项目信息 ======
+function renderProject() {
+  var projects = data.projects || [];
+  var html = '';
+  projects.forEach(function(p, i) {
+    html += '<div class="card"><div class="card-header">项目 #' + (i+1) + '</div>' +
+      '<div class="form-grid">' +
+      field('卡片标题', 'pj_title_' + p.id, p.title) +
+      field('应用名称', 'pj_app_name_' + p.id, p.app_name) +
+      field('应用图标 URL', 'pj_app_icon_' + p.id, p.app_icon, 'pj_app_icon_' + p.id) +
+      field('应用描述', 'pj_app_description_' + p.id, p.app_description) +
+      field('技术栈 (逗号分隔)', 'pj_tech_stack_' + p.id, p.tech_stack || '') +
+      textarea('项目介绍', 'pj_detail_description_' + p.id, p.detail_description || '') +
+      field('GitHub 链接', 'pj_github_url_' + p.id, p.github_url || '') +
+      field('在线演示链接', 'pj_demo_url_' + p.id, p.demo_url || '') +
+      textarea('截图 URLs (逗号分隔)', 'pj_screenshots_' + p.id, p.screenshots || '') +
+      field('视频链接', 'pj_video_url_' + p.id, p.video_url || '') +
+      field('下载链接', 'pj_download_url_' + p.id, p.download_url || '') +
+      field('下载按钮文字', 'pj_download_text_' + p.id, p.download_text || '') +
+      '</div>' +
+      '<div class="btn-group"><button class="btn btn-primary" onclick="saveProject(' + p.id + ')">保存</button> ' +
+      '<button class="btn btn-danger" onclick="deleteProject(' + p.id + ')">删除项目</button></div></div>';
+  });
+  html += '<div class="btn-group"><button class="btn btn-outline" onclick="addProject()">+ 添加项目</button></div>';
+  return html;
+}
+function addProject() {
+  showFormModal('添加项目', [
+    { key: 'title', label: '卡片标题', value: '' },
+    { key: 'app_name', label: '应用名称', value: '' },
+    { key: 'app_icon', label: '应用图标 URL', value: '' },
+    { key: 'app_description', label: '应用描述', value: '' },
+    { key: 'tech_stack', label: '技术栈 (逗号分隔)', value: '' },
+    { key: 'detail_description', label: '项目介绍', value: '' },
+    { key: 'github_url', label: 'GitHub 链接', value: '' },
+    { key: 'demo_url', label: '在线演示链接', value: '' },
+    { key: 'screenshots', label: '截图 URLs (逗号分隔)', value: '' },
+    { key: 'video_url', label: '视频链接', value: '' },
+    { key: 'download_url', label: '下载链接', value: '' },
+    { key: 'download_text', label: '下载按钮文字', value: '下载' }
+  ], function(form) {
+    apiFetch(API + '/projects', { method: 'POST', body: JSON.stringify(form) })
+      .then(function(r) { return r.json(); }).then(function(j) { if (j.code === 200) { toast('已添加'); loadData(); } });
+  });
+}
+function saveProject(id) {
+  var body = {};
+  ['title','app_name','app_icon','app_description','tech_stack','detail_description','github_url','demo_url','screenshots','video_url','download_url','download_text'].forEach(function(k) {
+    var el = document.getElementById('pj_' + k + '_' + id);
+    body[k] = el ? el.value : '';
+  });
+  apiFetch(API + '/projects/' + id, { method: 'PUT', body: JSON.stringify(body) })
+    .then(function(r) { return r.json(); }).then(function(j) { j.code === 200 ? toast('保存成功') : toast('保存失败', 'error'); });
+}
+function deleteProject(id) {
+  showConfirmModal('删除确认', '确定要删除这个项目吗？此操作不可撤销。', function() {
+    apiFetch(API + '/projects/' + id, { method: 'DELETE' }).then(function(r) { return r.json(); }).then(function(j) { if (j.code === 200) { toast('已删除'); loadData(); } });
+  });
+}
+
+// ====== 版本管理 ======
+function renderVersions() {
+  var versions = data.appVersions || [];
+  var html = '';
+  versions.forEach(function(v, i) {
+    html += '<div class="card"><div class="card-header">版本 #' + (i+1) + ' <span style="font-weight:400;font-size:12px;color:var(--text-secondary)">' + (v.created_at||'') + '</span></div>' +
+      '<div class="form-grid">' +
+      field('版本号', 'ver_code_' + v.id, v.version_code) +
+      field('下载链接', 'ver_url_' + v.id, v.download_url || '') +
+      '</div>' +
+      textarea('更新日志', 'ver_log_' + v.id, v.changelog || '') +
+      '<div class="btn-group"><button class="btn btn-primary" onclick="saveVersion(' + v.id + ')">保存</button> ' +
+      '<button class="btn btn-danger" onclick="deleteVersion(' + v.id + ')">删除</button></div></div>';
+  });
+  html += '<div class="btn-group"><button class="btn btn-outline" onclick="addVersion()">+ 添加版本</button></div>';
+  return html;
+}
+function addVersion() {
+  showFormModal('添加版本', [
+    { key: 'version_code', label: '版本号', value: '' },
+    { key: 'download_url', label: '下载链接', value: '' },
+    { key: 'changelog', label: '更新日志', value: '', type: 'textarea' }
+  ], function(data) {
+    apiFetch(API + '/app-versions', { method: 'POST', body: JSON.stringify(data) })
+      .then(function(r) { return r.json(); }).then(function(j) { if (j.code === 200) { toast('已添加'); loadData(); } });
+  });
+}
+function saveVersion(id) {
+  var body = {};
+  ['version_code','download_url','changelog'].forEach(function(k) {
+    var el = document.getElementById('ver_' + k + '_' + id);
+    body[k] = el ? el.value : '';
+  });
+  apiFetch(API + '/app-versions/' + id, { method: 'PUT', body: JSON.stringify(body) })
+    .then(function(r) { return r.json(); }).then(function(j) { j.code === 200 ? toast('保存成功') : toast('保存失败', 'error'); });
+}
+function deleteVersion(id) {
+  showConfirmModal('删除确认', '确定要删除这个版本吗？', function() {
+    apiFetch(API + '/app-versions/' + id, { method: 'DELETE' }).then(function(r) { return r.json(); }).then(function(j) { if (j.code === 200) { toast('已删除'); loadData(); } });
+  });
+}
+
+// ====== 公告管理 ======
+function renderNotices() {
+  var notices = data.appNotices || [];
+  var html = '';
+  notices.forEach(function(n, i) {
+    html += '<div class="card"><div class="card-header">公告 #' + (i+1) + '</div>' +
+      '<div class="form-grid">' +
+      field('标题', 'notice_title_' + n.id, n.title || '') +
+      field('链接', 'notice_url_' + n.id, n.url || '') +
+      field('图片 URL', 'notice_image_url_' + n.id, n.image_url || '', 'notice_image_url_' + n.id) +
+      '</div>' +
+      textarea('内容', 'notice_content_' + n.id, n.content || '') +
+      '<div style="margin:8px 0"><label class="checkbox-wrap"><input type="checkbox" id="notice_active_' + n.id + '"' + (n.is_active ? ' checked' : '') + '> 启用</label></div>' +
+      '<div class="btn-group"><button class="btn btn-primary" onclick="saveNotice(' + n.id + ')">保存</button> ' +
+      '<button class="btn btn-danger" onclick="deleteNotice(' + n.id + ')">删除</button></div></div>';
+  });
+  html += '<div class="btn-group"><button class="btn btn-outline" onclick="addNotice()">+ 添加公告</button></div>';
+  return html;
+}
+function addNotice() {
+  showFormModal('添加公告', [
+    { key: 'title', label: '标题', value: '' },
+    { key: 'url', label: '链接', value: '' },
+    { key: 'content', label: '内容', value: '', type: 'textarea' },
+    { key: 'image_url', label: '图片 URL', value: '' },
+    { key: 'is_active', label: '', type: 'checkbox', checkLabel: '启用', checked: true }
+  ], function(data) {
+    apiFetch(API + '/app-notices', { method: 'POST', body: JSON.stringify(data) })
+      .then(function(r) { return r.json(); }).then(function(j) { if (j.code === 200) { toast('已添加'); loadData(); } });
+  });
+}
+function saveNotice(id) {
+  var body = {};
+  ['title','content','url','image_url'].forEach(function(k) {
+    var el = document.getElementById('notice_' + k + '_' + id);
+    body[k] = el ? el.value : '';
+  });
+  body.is_active = (document.getElementById('notice_active_' + id) || {}).checked ? 1 : 0;
+  apiFetch(API + '/app-notices/' + id, { method: 'PUT', body: JSON.stringify(body) })
+    .then(function(r) { return r.json(); }).then(function(j) { j.code === 200 ? toast('保存成功') : toast('保存失败', 'error'); });
+}
+function deleteNotice(id) {
+  showConfirmModal('删除确认', '确定要删除这个公告吗？', function() {
+    apiFetch(API + '/app-notices/' + id, { method: 'DELETE' }).then(function(r) { return r.json(); }).then(function(j) { if (j.code === 200) { toast('已删除'); loadData(); } });
+  });
+}
+
+// ====== 音乐设置 ======
+function renderMusic() {
+  var music = data.music || [];
+  var html = '';
+  music.forEach(function(m, i) {
+    html += '<div class="card"><div class="card-header">音乐 #' + (i+1) + '</div>' +
+      '<div class="form-grid">' +
+      field('歌曲名', 'music_title_' + m.id, m.song_title) +
+      field('艺术家', 'music_artist_' + m.id, m.artist) +
+      field('音频文件路径', 'music_file_' + m.id, m.audio_file || '', 'music_file_' + m.id) +
+      '</div>' +
+      textarea('歌词片段', 'music_lyric_' + m.id, m.lyric_snippet || '') +
+      '<div class="btn-group"><button class="btn btn-primary" onclick="saveMusic(' + m.id + ')">保存</button> ' +
+      '<button class="btn btn-danger" onclick="deleteMusic(' + m.id + ')">删除</button></div></div>';
+  });
+  html += '<div class="btn-group"><button class="btn btn-outline" onclick="addMusic()">+ 添加音乐</button></div>';
+  return html;
+}
+function addMusic() {
+  showFormModal('添加音乐', [
+    { key: 'song_title', label: '歌曲名', value: '' },
+    { key: 'artist', label: '艺术家', value: '' },
+    { key: 'audio_file', label: '音频文件路径', value: '' },
+    { key: 'lyric_snippet', label: '歌词片段', value: '', type: 'textarea' }
+  ], function(data) {
+    apiFetch(API + '/music', { method: 'POST', body: JSON.stringify(data) })
+      .then(function(r) { return r.json(); }).then(function(j) { if (j.code === 200) { toast('已添加'); loadData(); } });
+  });
+}
+function saveMusic(id) {
+  var body = {};
+  ['song_title','artist','lyric_snippet','audio_file'].forEach(function(k) {
+    var el = document.getElementById('music_' + k + '_' + id);
+    body[k] = el ? el.value : '';
+  });
+  apiFetch(API + '/music/' + id, { method: 'PUT', body: JSON.stringify(body) })
+    .then(function(r) { return r.json(); }).then(function(j) { j.code === 200 ? toast('保存成功') : toast('保存失败', 'error'); });
+}
+function deleteMusic(id) {
+  showConfirmModal('删除确认', '确定要删除这首音乐吗？', function() {
+    apiFetch(API + '/music/' + id, { method: 'DELETE' }).then(function(r) { return r.json(); }).then(function(j) { if (j.code === 200) { toast('已删除'); loadData(); } });
+  });
+}
+
+// ====== 站点设置 ======
+function renderConfig() {
+  var c = data.config || {};
+  return '<div class="card"><div class="card-header">基本信息</div>' +
+    '<div class="form-grid">' +
+    field('页面标题', 'cfg_page_title', c.page_title) +
+    field('显示名称', 'cfg_display_name', c.display_name) +
+    field('Meta 描述', 'cfg_meta_description', c.meta_description) +
+    field('Meta 关键词', 'cfg_meta_keywords', c.meta_keywords) +
+    '</div>' +
+    '<div class="form-grid full" style="margin-top:8px">' +
+    textarea('欢迎语 (支持 HTML)', 'cfg_greeting', c.greeting) +
+    field('欢迎语模式', 'cfg_greeting_mode', c.greeting_mode || 'custom', false, '<select id="cfg_greeting_mode" style="flex:1;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:14px;background:#fafbfc"><option value="simple"' + ((c.greeting_mode||'custom')==='simple'?' selected':'') + '>简单模式（仅显示名称）</option><option value="custom"' + ((c.greeting_mode||'custom')==='custom'?' selected':'') + '>自定义 HTML</option></select>') +
+    field('位置标签', 'cfg_location_label', c.location_label) +
+    field('头像 URL', 'cfg_avatar_url', c.avatar_url, true) +
+    field('默认主题', 'cfg_theme', c.theme || 'default', false, '<select id="cfg_theme" style="flex:1;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:14px;background:#fafbfc"><option value="default"' + ((c.theme||'default')==='default'?' selected':'') + '>默认（浅色紫蓝）</option><option value="dark"' + ((c.theme||'default')==='dark'?' selected':'') + '>暗色</option><option value="ocean"' + ((c.theme||'default')==='ocean'?' selected':'') + '>海洋（蓝青色）</option><option value="sunset"' + ((c.theme||'default')==='sunset'?' selected':'') + '>日落（暖橙）</option><option value="forest"' + ((c.theme||'default')==='forest'?' selected':'') + '>森林（绿色）</option><option value="ocean-dark"' + ((c.theme||'default')==='ocean-dark'?' selected':'') + '>深海（暗蓝）</option></select>') +
+    textarea('个人简介 (JSON)', 'cfg_descriptions', c.descriptions || '[]') +
+    '</div>' +
+    '<div class="btn-group"><button class="btn btn-primary" onclick="saveConfig()">保存设置</button></div>' +
+    '</div>' +
+    '<div class="card"><div class="card-header">页脚设置</div>' +
+    '<div class="form-grid">' +
+    field('版权文字', 'cfg_footer_copyright', c.footer_copyright) +
+    field('标语', 'cfg_footer_slogan', c.footer_slogan) +
+    field('ICP 备案号', 'cfg_footer_icp_number', c.footer_icp_number) +
+    field('ICP 链接', 'cfg_footer_icp_url', c.footer_icp_url) +
+    field('源码标签', 'cfg_footer_source_code_label', c.footer_source_code_label) +
+    field('源码链接', 'cfg_footer_source_code_url', c.footer_source_code_url) +
+    '</div>' +
+    '<div class="btn-group"><button class="btn btn-primary" onclick="saveConfig()">保存设置</button></div>' +
+    '</div>' +
+    '<div class="card"><div class="card-header">登录页面设置</div>' +
+    '<div class="form-grid full">' +
+    field('登录背景图片 URL', 'cfg_login_bg_url', c.login_bg_url || '', true) +
+    '</div>' +
+    '<div style="margin-top:8px;font-size:12px;color:var(--text-secondary)">留空则使用默认渐变背景。支持在线图片URL或上传图片。</div>' +
+    '<div class="btn-group"><button class="btn btn-primary" onclick="saveConfig()">保存设置</button></div>' +
+    '</div>';
+}
+
+function saveConfig() {
+  var keys = ['page_title','meta_description','meta_keywords','display_name','greeting','greeting_mode','theme','location_label','avatar_url','descriptions','footer_copyright','footer_slogan','footer_icp_number','footer_icp_url','footer_source_code_label','footer_source_code_url','login_bg_url'];
+  var body = {};
+  keys.forEach(function(k) { body[k] = document.getElementById('cfg_' + k) ? document.getElementById('cfg_' + k).value : ''; });
+  apiFetch(API + '/config', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+    .then(function(r) { return r.json(); }).then(function(j) { j.code === 200 ? toast('保存成功') : toast('保存失败', 'error'); });
+}
+
+function field(label, id, val, uploadId, customHtml) {
+  var inputHtml;
+  if (customHtml) {
+    inputHtml = customHtml;
+  } else {
+    inputHtml = '<input id="' + id + '" value="' + esc(val) + '" style="flex:1">';
+  }
+  var extra = uploadId ? ' <button class="btn btn-sm btn-outline" style="padding:7px 10px;flex-shrink:0" onclick="event.preventDefault();triggerUpload(function(url){document.getElementById(\'' + id + '\').value=url;},\'' + id + '\')" title="上传图片">上传</button>' : '';
+  return '<div class="form-group"><label>' + label + '</label><div style="display:flex;gap:6px;align-items:center">' + inputHtml + extra + '</div></div>';
+}
+function textarea(label, id, val) {
+  return '<div class="form-group"><label>' + label + '</label><textarea id="' + id + '">' + esc(val) + '</textarea></div>';
+}
+
+function triggerUpload(cb, fieldId) {
+  var inp = document.getElementById('uploadInput');
+  inp._cb = cb;
+  inp.click();
+}
+function handleUpload(input) {
+  var file = input.files[0];
+  if (!file) return;
+  var fd = new FormData();
+  fd.append('file', file);
+  fetch(API + '/upload', { method: 'POST', headers: { 'X-Admin-Token': getToken() }, body: fd })
+    .then(function(r) { return r.json(); })
+    .then(function(j) {
+      if (j.code === 200 && input._cb) input._cb(j.data.url);
+      else toast('上传失败', 'error');
+    });
+  input.value = '';
+}
+
+// ====== 友情链接 ======
+function renderFriendLinks() {
+  var links = data.friendLinks || [];
+  var html = '<div class="card"><div class="card-header">友情链接 <span style="font-weight:400;font-size:12px;color:var(--text-secondary)">（主页底部展示）</span></div>';
+  if (links.length === 0) {
+    html += '<div style="text-align:center;padding:30px;color:var(--text-secondary);font-size:14px;">暂无友链</div>';
+  } else {
+    html += '<table class="data-table"><thead><tr><th>名称</th><th>链接</th><th style="width:140px">描述</th><th class="col-actions">操作</th></tr></thead><tbody>';
+    links.forEach(function(l) {
+      html += '<tr>' +
+        '<td style="min-width:80px"><input value="' + esc(l.name) + '" data-id="' + l.id + '" class="fl-name"></td>' +
+        '<td><input value="' + esc(l.url) + '" data-id="' + l.id + '" class="fl-url"></td>' +
+        '<td><input value="' + esc(l.description) + '" data-id="' + l.id + '" class="fl-desc"></td>' +
+        '<td class="col-actions"><button class="btn btn-sm btn-primary" onclick="saveFriendLink(' + l.id + ')">保存</button> <button class="btn btn-sm btn-danger" onclick="deleteFriendLink(' + l.id + ')">删除</button></td>' +
+        '</tr>';
+    });
+    html += '</tbody></table>';
+  }
+  html += '<div class="btn-group"><button class="btn btn-outline" onclick="addFriendLink()">+ 添加友链</button></div></div>';
+  return html;
+}
+
+function addFriendLink() {
+  var curLen = (data.friendLinks||[]).length;
+  showFormModal('添加友链', [
+    { key: 'name', label: '名称', value: '' },
+    { key: 'url', label: '链接', value: 'https://' },
+    { key: 'description', label: '描述', value: '' }
+  ], function(form) {
+    form.sort_order = curLen;
+    apiFetch(API + '/friend-links', { method: 'POST', body: JSON.stringify(form) })
+      .then(function(r) { return r.json(); }).then(function(j) { if (j.code === 200) { toast('已添加'); loadData(); } });
+  });
+}
+function saveFriendLink(id) {
+  var name = (document.querySelector('.fl-name[data-id="' + id + '"]') || {}).value || '';
+  var url = (document.querySelector('.fl-url[data-id="' + id + '"]') || {}).value || '';
+  var description = (document.querySelector('.fl-desc[data-id="' + id + '"]') || {}).value || '';
+  var sort_order = (data.friendLinks || []).findIndex(function(l) { return l.id === id; });
+  apiFetch(API + '/friend-links/' + id, { method: 'PUT', body: JSON.stringify({ name: name, url: url, description: description, sort_order: sort_order }) })
+    .then(function(r) { return r.json(); }).then(function(j) { j.code === 200 ? toast('保存成功') : toast('保存失败', 'error'); });
+}
+function deleteFriendLink(id) {
+  showConfirmModal('删除确认', '确定要删除这个友链吗？', function() {
+    apiFetch(API + '/friend-links/' + id, { method: 'DELETE' }).then(function(r) { return r.json(); }).then(function(j) { if (j.code === 200) { toast('已删除'); loadData(); } });
+  });
+}
+
+// ====== 技能 ======
+function renderSkills() {
+  var skills = data.skills || [];
+  var html = '<div class="card"><div class="card-header">技能展示</div>';
+  html += '<table class="data-table"><thead><tr><th style="width:140px">名称</th><th style="width:70px">熟练度%</th><th style="width:90px">分类</th><th style="width:80px">颜色</th><th class="col-actions">操作</th></tr></thead><tbody>';
+  skills.forEach(function(s) {
+    html += '<tr>' +
+      '<td><input value="' + esc(s.name) + '" data-id="' + s.id + '" class="sk-name"></td>' +
+      '<td><input type="number" min="0" max="100" value="' + (s.level||80) + '" data-id="' + s.id + '" class="sk-level" style="width:100%"></td>' +
+      '<td><input value="' + esc(s.category||'') + '" data-id="' + s.id + '" class="sk-cat"></td>' +
+      '<td><input type="color" value="' + esc(s.color||'#6366f1') + '" data-id="' + s.id + '" class="sk-color" style="width:36px;height:32px;padding:2px"></td>' +
+      '<td class="col-actions"><button class="btn btn-sm btn-primary" onclick="saveSkill(' + s.id + ')">保存</button> <button class="btn btn-sm btn-danger" onclick="deleteSkill(' + s.id + ')">删除</button></td>' +
+      '</tr>';
+  });
+  html += '</tbody></table>';
+  html += '<div class="btn-group"><button class="btn btn-outline" onclick="addSkill()">+ 添加</button></div></div>';
+  return html;
+}
+
+function addSkill() {
+  var curLen = (data.skills||[]).length;
+  showFormModal('添加技能', [
+    { key: 'name', label: '技能名称', value: '' },
+    { key: 'level', label: '熟练度 (0-100)', value: '80' },
+    { key: 'category', label: '分类', value: '' },
+    { key: 'color', label: '颜色', value: '#6366f1' }
+  ], function(form) {
+    form.sort_order = curLen;
+    apiFetch(API + '/skills', { method: 'POST', body: JSON.stringify(form) })
+      .then(function(r) { return r.json(); }).then(function(j) { if (j.code === 200) { toast('已添加'); loadData(); } });
+  });
+}
+
+function saveSkill(id) {
+  var name = (document.querySelector('.sk-name[data-id="' + id + '"]') || {}).value || '';
+  var level = parseInt((document.querySelector('.sk-level[data-id="' + id + '"]') || {}).value) || 80;
+  var category = (document.querySelector('.sk-cat[data-id="' + id + '"]') || {}).value || '';
+  var color = (document.querySelector('.sk-color[data-id="' + id + '"]') || {}).value || '#6366f1';
+  var sort_order = (data.skills || []).findIndex(function(s) { return s.id === id; });
+  apiFetch(API + '/skills/' + id, { method: 'PUT', body: JSON.stringify({ name:name, level:level, category:category, color:color, sort_order:sort_order }) })
+    .then(function(r) { return r.json(); }).then(function(j) { j.code === 200 ? toast('保存成功') : toast('保存失败', 'error'); });
+}
+
+function deleteSkill(id) {
+  showConfirmModal('删除确认', '确定要删除这个技能吗？', function() {
+    apiFetch(API + '/skills/' + id, { method: 'DELETE' }).then(function(r) { return r.json(); }).then(function(j) { if (j.code === 200) { toast('已删除'); loadData(); } });
+  });
+}
+
+// ====== 统计 ======
+function renderStats() {
+  var html = '<div class="card"><div class="card-header">加载中...</div></div>';
+  apiFetch(API + '/stats').then(function(r) { return r.json(); }).then(function(j) {
+    if (j.code !== 200) return;
+    var d = j.data;
+    var today = d.today || {};
+    var total = d.total || {};
+    var last7 = d.last7 || [];
+
+    var days = [];
+    var now = new Date();
+    for (var i = 6; i >= 0; i--) {
+      var dt = new Date(now);
+      dt.setDate(dt.getDate() - i);
+      var ds = dt.toISOString().slice(0, 10);
+      var row = last7.find(function(r) { return r.date === ds; }) || { pv: 0, uv: 0 };
+      days.push({ date: ds.slice(5), pv: row.pv, uv: row.uv });
+    }
+
+    var maxPV = Math.max.apply(null, days.map(function(d) { return d.pv; })) || 1;
+    var bars = days.map(function(d) {
+      var h = Math.round((d.pv / maxPV) * 120) || 2;
+      return '<div style="flex:1;text-align:center;font-size:11px">' +
+        '<div style="font-weight:600;font-size:13px;color:var(--primary)">' + d.pv + '</div>' +
+        '<div style="margin:4px auto 0;width:100%;max-width:40px;height:' + h + 'px;background:var(--primary);border-radius:4px 4px 0 0;min-height:2px"></div>' +
+        '<div style="color:var(--text-secondary);margin-top:4px">' + d.date + '</div></div>';
+    }).join('');
+
+    var main = document.getElementById('mainContent');
+    var section = main.querySelector('.section.active') || main;
+    section.innerHTML = '<div class="page-header"><h1>访问统计</h1></div>' +
+      '<div class="card" style="display:flex;gap:32px"><div style="flex:1"><div style="font-size:13px;color:var(--text-secondary)">今日 PV</div><div style="font-size:28px;font-weight:700;color:var(--primary)">' + today.pv + '</div></div><div style="flex:1"><div style="font-size:13px;color:var(--text-secondary)">今日 UV</div><div style="font-size:28px;font-weight:700;color:var(--success)">' + today.uv + '</div></div><div style="flex:1"><div style="font-size:13px;color:var(--text-secondary)">累计 PV</div><div style="font-size:28px;font-weight:700">' + total.pv + '</div></div><div style="flex:1"><div style="font-size:13px;color:var(--text-secondary)">累计 UV</div><div style="font-size:28px;font-weight:700">' + total.uv + '</div></div></div>' +
+      '<div class="card"><div class="card-header">近7天 PV 趋势</div><div style="display:flex;align-items:flex-end;gap:8px;height:180px;padding:0 8px">' + bars + '</div></div>';
+  });
+  return '<div class="page-header"><h1>访问统计</h1></div><div class="card"><div class="card-header">加载中...</div></div>';
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarBackdrop').classList.remove('show');
+  document.getElementById('hamburger').classList.remove('open');
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarBackdrop').classList.toggle('show');
+  document.getElementById('hamburger').classList.toggle('open');
+}
+
+checkLogin();
+</script>
+</body>
+</html>

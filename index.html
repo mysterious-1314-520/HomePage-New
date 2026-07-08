@@ -1,209 +1,67 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>你好，我是计堡</title>
+    <title id="dyn-page-title">你好，我是计堡</title>
     <link rel="icon" href="favicon.ico">
-    <meta name="description" content="你好，我是计堡">
-    <meta name="keywords" content="计堡,定时点击器Ultra">
+    <meta id="dyn-meta-desc" name="description" content="你好，我是计堡">
+    <meta id="dyn-meta-kw" name="keywords" content="计堡,定时点击器Ultra">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" href="./static/css/style.css?v=1.33">
-
-
+    <link rel="stylesheet" href="./static/css/style.css?v=2.0">
     <script>
         (function () {
-            var theme = document.cookie.match(/themeState=([^;]+)/);
-            if (theme && theme[1] === "Dark") {
-                document.documentElement.setAttribute('data-theme', 'dark');
+            var t = document.cookie.match(/themeState=([^;]+)/);
+            if (t && t[1]) {
+                document.documentElement.setAttribute('data-theme', t[1]);
             }
-        })();
+    window.cycleTheme = function() {
+      var themes = ['default', 'dark', 'ocean', 'sunset', 'forest', 'ocean-dark'];
+      var cur = document.documentElement.getAttribute('data-theme') || 'default';
+      var idx = themes.indexOf(cur);
+      var next = themes[(idx + 1) % themes.length];
+      document.documentElement.setAttribute('data-theme', next);
+      document.cookie = 'themeState=' + next + ';path=/;max-age=31536000';
+    };
+    })();
     </script>
-
 </head>
-
 <body>
-
     <div class="main">
-
         <div onclick="left()" class="left">
             <div class="left-main">
-
-                <div class="logo" style="background-image: url(favicon.ico);">
-                    <!-- 头像挂件 -->
-                    <!-- <img style="display: none; position: absolute;top:-15%;left:-10%;width: 120%; aspect-ratio: 1/1;" src="" alt="avatar"> -->
-                </div>
-
+                <div class="logo" id="dyn-logo" style="background-image: url(favicon.ico);"></div>
                 <div class="left-div left-des">
                     <div class="left-div-item">
                         <svg t="1705773709627" class="icon" viewBox="0 0 1024 1024" version="1.1"
                             xmlns="http://www.w3.org/2000/svg" p-id="1478" width="20px" height="20px">
-                            <path
-                                d="M512 249.976471c-99.388235 0-180.705882 81.317647-180.705882 180.705882s81.317647 180.705882 180.705882 180.705882 180.705882-81.317647 180.705882-180.705882-81.317647-180.705882-180.705882-180.705882z m0 301.17647c-66.258824 0-120.470588-54.211765-120.470588-120.470588s54.211765-120.470588 120.470588-120.470588 120.470588 54.211765 120.470588 120.470588-54.211765 120.470588-120.470588 120.470588z"
-                                fill="#2c2c2c" p-id="1479"></path>
-                            <path
-                                d="M512 39.152941c-216.847059 0-391.529412 174.682353-391.529412 391.529412 0 349.364706 391.529412 572.235294 391.529412 572.235294s391.529412-222.870588 391.529412-572.235294c0-216.847059-174.682353-391.529412-391.529412-391.529412z m0 891.482353C424.658824 873.411765 180.705882 686.682353 180.705882 430.682353c0-183.717647 147.576471-331.294118 331.294118-331.294118s331.294118 147.576471 331.294118 331.294118c0 256-243.952941 442.729412-331.294118 499.952941z"
-                                fill="#2c2c2c" p-id="1480"></path>
+                            <path d="M512 249.976471c-99.388235 0-180.705882 81.317647-180.705882 180.705882s81.317647 180.705882 180.705882 180.705882 180.705882-81.317647 180.705882-180.705882-81.317647-180.705882-180.705882-180.705882z m0 301.17647c-66.258824 0-120.470588-54.211765-120.470588-120.470588s54.211765-120.470588 120.470588-120.470588 120.470588 54.211765 120.470588 120.470588-54.211765 120.470588-120.470588 120.470588z" fill="#2c2c2c" p-id="1479"></path>
+                            <path d="M512 39.152941c-216.847059 0-391.529412 174.682353-391.529412 391.529412 0 349.364706 391.529412 572.235294 391.529412 572.235294s391.529412-222.870588 391.529412-572.235294c0-216.847059-174.682353-391.529412-391.529412-391.529412z m0 891.482353C424.658824 873.411765 180.705882 686.682353 180.705882 430.682353c0-183.717647 147.576471-331.294118 331.294118-331.294118s331.294118 147.576471 331.294118 331.294118c0 256-243.952941 442.729412-331.294118 499.952941z" fill="#2c2c2c" p-id="1480"></path>
                         </svg>
-                        <!-- Location label -->
-                        Home🏠
+                        <span id="dyn-location">Home</span>
                     </div>
                 </div>
-                <div class="left-div left-tag">
-                    <div class="left-tag-item">Developer</div>
-                    <div class="left-tag-item">Student</div>
-                    <div class="left-tag-item">卑微小up</div>
-                    <div class="left-tag-item">方块人</div>
+                <div class="left-div left-tag" id="dyn-tags">
                 </div>
-
-
                 <div class="left-div left-time">
-                    <ul id="line">
-                        <li>
-                            <div class="focus"></div>
-                            <div>未来</div>
-                            <div>塔菲不知道喵</div>
-                        </li>
-
-                        <li>
-                            <div class="focus"></div>
-                            <div>2026年1月7日23:02:24</div>
-                            <div>我闲着没事搭建了这个网站</div>
-                        </li>
-                        <li>
-                            <div class="focus"></div>
-                            <div>2022年07月17日</div>
-                            <div>这个<a href="https://littlecold.cn">域名</a>被注册了</div>
-                        </li>
-                    </ul>
+                    <ul id="dyn-timeline"></ul>
                 </div>
             </div>
         </div>
         <div class="right">
-
-
             <header>
-                <div class="welcome">你好，我是 <span class="gradientText">计堡</span>，很高兴认识你！</div>
-                <div class="description"><img src="static/img/mc.ico" alt="avatar" width="16" height="16"> <span
-                        class="purpleText">方块人</span> 十年老玩家
-                </div>
-                <div class="description">📝Vibe Coding 大手子
-                </div>
-                <div class="iconContainer">
-
-                    <!---->
-
-                    <!-- Github -->
-                    <a class="iconItemLong" target="_blank" href="https://github.com/hanbao233xD">
-                        <svg t="1704870335945" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                            xmlns="http://www.w3.org/2000/svg" p-id="2487" width="22px" height="22px">
-                            <path
-                                d="M511.6 76.3C264.3 76.2 64 276.4 64 523.5 64 718.9 189.3 885 363.8 946c23.5 5.9 19.9-10.8 19.9-22.2v-77.5c-135.7 15.9-141.2-73.9-150.3-88.9C215 726 171.5 718 184.5 703c30.9-15.9 62.4 4 98.9 57.9 26.4 39.1 77.9 32.5 104 26 5.7-23.5 17.9-44.5 34.7-60.8-140.6-25.2-199.2-111-199.2-213 0-49.5 16.3-95 48.3-131.7-20.4-60.5 1.9-112.3 4.9-120 58.1-5.2 118.5 41.6 123.2 45.3 33-8.9 70.7-13.6 112.9-13.6 42.4 0 80.2 4.9 113.5 13.9 11.3-8.6 67.3-48.8 121.3-43.9 2.9 7.7 24.7 58.3 5.5 118 32.4 36.8 48.9 82.7 48.9 132.3 0 102.2-59 188.1-200 212.9 23.5 23.2 38.1 55.4 38.1 91v112.5c0.8 9 0 17.9 15 17.9 177.1-59.7 304.6-227 304.6-424.1 0-247.2-200.4-447.3-447.5-447.3z"
-                                fill="#000000" p-id="2488"></path>
-
-                        </svg>
-                        <div class="iconTip">Github</div>
-                    </a>
-                    <!---->
-
-                    <!-- twitter -->
-                    <!-- <a class="iconItem" target="_blank"
-                        href="https://twitter.com/intent/user?user_id=1564057561996832770">
-                        <svg viewBox='0 0 24 24' width='1.2em' height='1.2em' xmlns='http://www.w3.org/2000/svg'>
-                            <path fill='currentColor'
-                                d='M22.212 5.656a8.384 8.384 0 0 1-2.401.658A4.195 4.195 0 0 0 21.649 4c-.82.488-1.719.83-2.655 1.015a4.182 4.182 0 0 0-7.126 3.814a11.874 11.874 0 0 1-8.621-4.37a4.168 4.168 0 0 0-.566 2.103c0 1.45.739 2.731 1.86 3.481a4.169 4.169 0 0 1-1.894-.523v.051a4.185 4.185 0 0 0 3.355 4.102a4.205 4.205 0 0 1-1.89.072A4.185 4.185 0 0 0 8.02 16.65a8.394 8.394 0 0 1-6.192 1.732a11.831 11.831 0 0 0 6.41 1.88c7.694 0 11.9-6.373 11.9-11.9c0-.18-.004-.362-.012-.541a8.497 8.497 0 0 0 2.086-2.164' />
-                        </svg>
-                    </a> -->
-
-                    <!-- bilibili -->
-                    <a class="iconItemLong" target="_blank" href="https://space.bilibili.com/299635441">
-                        <svg viewBox='0 0 24 24' width='1.2em' height='1.2em' xmlns='http://www.w3.org/2000/svg'>
-                            <path fill='currentColor'
-                                d='M18.223 3.086a1.25 1.25 0 0 1 0 1.768L17.08 5.996h1.17A3.75 3.75 0 0 1 22 9.746v7.5a3.75 3.75 0 0 1-3.75 3.75H5.75A3.75 3.75 0 0 1 2 17.246v-7.5a3.75 3.75 0 0 1 3.75-3.75h1.166L5.775 4.855a1.25 1.25 0 0 1 1.767-1.768l2.652 2.651c.079.08.145.166.198.258h3.213c.053-.092.12-.18.199-.259l2.651-2.651a1.25 1.25 0 0 1 1.768 0Zm.027 5.42H5.75a1.25 1.25 0 0 0-1.247 1.157l-.003.093v7.5c0 .66.51 1.2 1.157 1.247l.093.003h12.5a1.25 1.25 0 0 0 1.247-1.156l.003-.094v-7.5c0-.69-.56-1.25-1.25-1.25Zm-10 2.5c.69 0 1.25.56 1.25 1.25v1.25a1.25 1.25 0 0 1-2.5 0v-1.25c0-.69.56-1.25 1.25-1.25Zm7.5 0c.69 0 1.25.56 1.25 1.25v1.25a1.25 1.25 0 0 1-2.5 0v-1.25c0-.69.56-1.25 1.25-1.25Z' />
-                        </svg>
-                        <div class="iconTip">Bilibili</div>
-                    </a>
-
-                    <!-- QQ -->
-                    <a class="iconItemLong" target="_blank" href="https://qm.qq.com/q/mRDtmxup10">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g id="buslogo-qq">
-                                <path id="fill1"
-                                    d="M20.2145 14.6548C20.0273 14.0523 19.7714 13.3498 19.513 12.675L18.5692 10.3156C18.5692 10.2884 18.5818 9.82435 18.5818 9.58475C18.5818 5.55233 16.6781 1.50052 11.9971 1.5C7.3161 1.49948 5.41184 5.55233 5.41184 9.58475C5.41184 9.82383 5.42389 10.2884 5.42442 10.3156L4.48067 12.675C4.22167 13.3498 3.96633 14.0523 3.77916 14.6548C2.88784 17.5279 3.17568 18.717 3.39589 18.7443C3.86776 18.8015 5.23567 16.581 5.23567 16.581C5.23567 17.8666 5.89734 19.5444 7.32921 20.7561C6.7939 20.9212 6.13747 21.1755 5.71541 21.4864C5.33633 21.7664 5.38352 22.0516 5.45325 22.168C5.75368 22.6745 10.6009 22.4915 12.0002 22.3337C13.3996 22.491 18.2468 22.6745 18.5467 22.168C18.6148 22.0527 18.662 21.7674 18.2845 21.4864C17.8651 21.175 17.2055 20.9207 16.6697 20.7555C18.1015 19.5444 18.7632 17.8666 18.7632 16.581C18.7632 16.581 20.1306 18.8015 20.603 18.7443C20.8195 18.7181 21.1089 17.529 20.2145 14.6548Z"
-                                    fill="transparent" />
-                                <path id="stroke1"
-                                    d="M20.2145 14.6548C20.0273 14.0523 19.7714 13.3498 19.513 12.675L18.5692 10.3156C18.5692 10.2884 18.5818 9.82435 18.5818 9.58475C18.5818 5.55233 16.6781 1.50052 11.9971 1.5C7.3161 1.49948 5.41184 5.55233 5.41184 9.58475C5.41184 9.82383 5.42389 10.2884 5.42442 10.3156L4.48067 12.675C4.22167 13.3498 3.96633 14.0523 3.77916 14.6548C2.88784 17.5279 3.17568 18.717 3.39589 18.7443C3.86776 18.8015 5.23567 16.581 5.23567 16.581C5.23567 17.8666 5.89734 19.5444 7.32921 20.7561C6.7939 20.9212 6.13747 21.1755 5.71541 21.4864C5.33633 21.7664 5.38352 22.0516 5.45325 22.168C5.75368 22.6745 10.6009 22.4915 12.0002 22.3337C13.3996 22.491 18.2468 22.6745 18.5467 22.168C18.6148 22.0527 18.662 21.7674 18.2845 21.4864C17.8651 21.175 17.2055 20.9207 16.6697 20.7555C18.1015 19.5444 18.7632 17.8666 18.7632 16.581C18.7632 16.581 20.1306 18.8015 20.603 18.7443C20.8195 18.7181 21.1089 17.529 20.2145 14.6548Z"
-                                    stroke-width="2" stroke="currentColor" />
-                            </g>
-                        </svg>
-                        <div class="iconTip">QQ</div>
-
-                        <!-- email -->
-                        <a class="iconItem" target="_blank" href="mailto:hanba0qwq@Outlook.com">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                <path fill="currentColor"
-                                    d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 4l-8 5l-8-5V6l8 5l8-5z" />
-                            </svg>
-                        </a>
-
-                        <!-- sponsor -->
-                        <!-- <a class="iconItem" target="_blank" onclick="PopUp('./static/img/sponsor.jpg')">
-                        <svg width="1.2em" height="1.2em" viewBox="0 0 32 32" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M15.8401 19.345H15.9101C17.4101 19.385 18.6101 20.605 18.6101 22.105C18.6101 23.385 17.7401 24.455 16.5601 24.775V25.895C16.5601 26.295 16.2401 26.615 15.8401 26.615C15.4401 26.615 15.1201 26.295 15.1201 25.895V24.775C13.9401 24.455 13.0701 23.385 13.0701 22.105C13.0701 21.705 13.3901 21.385 13.7901 21.385C14.1901 21.385 14.5101 21.705 14.5101 22.105C14.5101 22.845 15.1001 23.435 15.8301 23.435C16.5601 23.435 17.1601 22.835 17.1601 22.105C17.1601 21.375 16.5601 20.775 15.8301 20.775H15.7601C14.2701 20.735 13.0701 19.515 13.0701 18.015C13.0701 16.735 13.9401 15.665 15.1201 15.345V14.225C15.1201 13.825 15.4401 13.505 15.8401 13.505C16.2401 13.505 16.5601 13.825 16.5601 14.225V15.345C17.7401 15.665 18.6101 16.735 18.6101 18.015C18.6101 18.415 18.2901 18.735 17.8901 18.735C17.4901 18.735 17.1701 18.415 17.1701 18.015C17.1701 17.285 16.5701 16.685 15.8401 16.685C15.1101 16.685 14.5101 17.285 14.5101 18.015C14.5101 18.745 15.1101 19.345 15.8401 19.345Z"
-                                fill="#212121" />
-                            <path
-                                d="M10.532 5.09995L13.3181 8.35983L13.0166 8.69618C7.28298 9.98229 3 15.1026 3 21.2249C3 26.6072 7.36772 30.9749 12.75 30.9749H18.92C24.3018 30.9749 28.6692 26.608 28.67 21.2264C28.6794 15.1029 24.3969 9.98239 18.6634 8.69621C18.6678 8.65637 18.67 8.61592 18.67 8.57497C18.67 8.39779 18.6278 8.2299 18.553 8.08084L20.923 5.36795L21.076 5.13195C21.2547 4.74228 21.3004 4.30471 21.2061 3.88653C21.1118 3.46835 20.8827 3.09273 20.5541 2.81742C20.2256 2.54212 19.8156 2.38239 19.3874 2.36279C18.9592 2.34319 18.5364 2.46481 18.184 2.70895L17.341 1.70895C17.152 1.49719 16.9204 1.32767 16.6615 1.21144C16.4025 1.09522 16.122 1.0349 15.8381 1.03443C15.5543 1.03395 15.2735 1.09334 15.0142 1.2087C14.7548 1.32407 14.5227 1.49282 14.333 1.70395L13.45 2.68995C13.0985 2.44074 12.6748 2.31426 12.2442 2.3301C11.8137 2.34594 11.4003 2.5032 11.0681 2.77756C10.7359 3.05192 10.5034 3.42809 10.4065 3.8479C10.3096 4.2677 10.3537 4.70774 10.532 5.09995ZM14.331 6.48495L12.635 4.52595C13.029 4.71581 13.4748 4.76972 13.9028 4.67925C14.3307 4.58879 14.7165 4.35904 15 4.02595L15.8 2.98695L16.688 4.03895C16.9649 4.36093 17.3384 4.58483 17.7528 4.67727C18.1673 4.76971 18.6005 4.72576 18.988 4.55195L17.3 6.48495H14.331ZM5 21.2249C5 15.2372 9.85228 10.3849 15.84 10.3849C21.828 10.3849 26.6792 15.2371 26.67 21.2234L26.67 21.2249C26.67 25.5026 23.1977 28.9749 18.92 28.9749H12.75C8.47228 28.9749 5 25.5026 5 21.2249Z"
-                                fill="#212121" />
-                        </svg>
-                    </a> -->
-
-                        <!-- sidebar for mobiles -->
-                        <!-- <a class="iconItem" href="javascript:void(0)" onclick="left()">
-                        <svg t="1706175679525" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                            xmlns="http://www.w3.org/2000/svg" p-id="1880" width="22px" height="22px">
-                            <path
-                                d="M389.2 98.93H189.43c-49.51 0-89.8 40.28-89.8 89.8V388.5c0 49.51 40.28 89.8 89.8 89.8H389.2c49.51 0 89.8-40.28 89.8-89.8V188.72c0-49.51-40.28-89.79-89.8-89.79z m29.93 289.56c0 16.5-13.43 29.93-29.93 29.93H189.43c-16.5 0-29.93-13.43-29.93-29.93V188.72c0-16.5 13.43-29.93 29.93-29.93H389.2c16.5 0 29.93 13.43 29.93 29.93v199.77zM389.2 547.34H189.43c-49.51 0-89.8 40.28-89.8 89.8v199.77c0 49.51 40.28 89.8 89.8 89.8H389.2c49.51 0 89.8-40.28 89.8-89.8V637.14c0-49.51-40.28-89.8-89.8-89.8z m29.93 289.57c0 16.5-13.43 29.93-29.93 29.93H189.43c-16.5 0-29.93-13.43-29.93-29.93V637.14c0-16.5 13.43-29.93 29.93-29.93H389.2c16.5 0 29.93 13.43 29.93 29.93v199.77zM837.56 98.93H637.79c-49.51 0-89.8 40.28-89.8 89.8V388.5c0 49.51 40.28 89.8 89.8 89.8h199.77c49.51 0 89.8-40.28 89.8-89.8V188.72c0-49.51-40.28-89.79-89.8-89.79z m29.93 289.56c0 16.5-13.43 29.93-29.93 29.93H637.79c-16.5 0-29.93-13.43-29.93-29.93V188.72c0-16.5 13.43-29.93 29.93-29.93h199.77c16.5 0 29.93 13.43 29.93 29.93v199.77zM837.56 547.34H637.79c-49.51 0-89.8 40.28-89.8 89.8v199.77c0 49.51 40.28 89.8 89.8 89.8h199.77c49.51 0 89.8-40.28 89.8-89.8V637.14c0-49.51-40.28-89.8-89.8-89.8z m29.93 289.57c0 16.5-13.43 29.93-29.93 29.93H637.79c-16.5 0-29.93-13.43-29.93-29.93V637.14c0-16.5 13.43-29.93 29.93-29.93h199.77c16.5 0 29.93 13.43 29.93 29.93v199.77z"
-                                p-id="1881" fill="#000000"></path>
-                        </svg>
-                    </a> -->
-
-                        <!-- switch -->
-                        <a class="iconItem switch" href="javascript:void(0)">
-                            <div class="onoffswitch">
-                                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
-                                    id="myonoffswitch" checked>
-                                <label class="onoffswitch-label" for="myonoffswitch">
-                                    <span class="onoffswitch-inner"></span>
-                                    <span class="onoffswitch-switch"></span>
-                                </label>
-                            </div>
-                        </a>
-                        <!---->
-                </div>
-                <div class="project-card-header">来试试我的新项目</div>
-                <div class="project-card">
-                    <div class="project-card-icon">
-                        <img src="static/img/littleclicker.jpg" alt="定时点击器Ultra">
-                    </div>
-                    <div class="project-card-content">
-                        <div class="project-card-title">定时点击器Ultra</div>
-                        <div class="project-card-desc">你的抢购、任务助手。</div>
-                        <a href="https://www.bilibili.com/video/BV1QBQ1ByE7U/" target="_blank" class="project-card-btn"
-                            style="background: transparent; color: #ff69b4; border: 2px solid #ff69b4; margin-bottom: 8px;"><svg
-                                viewBox='0 0 24 24' width='1.2em' height='1.2em' xmlns='http://www.w3.org/2000/svg'>
-                                <path fill='currentColor'
-                                    d='M18.223 3.086a1.25 1.25 0 0 1 0 1.768L17.08 5.996h1.17A3.75 3.75 0 0 1 22 9.746v7.5a3.75 3.75 0 0 1-3.75 3.75H5.75A3.75 3.75 0 0 1 2 17.246v-7.5a3.75 3.75 0 0 1 3.75-3.75h1.166L5.775 4.855a1.25 1.25 0 0 1 1.767-1.768l2.652 2.651c.079.08.145.166.198.258h3.213c.053-.092.12-.18.199-.259l2.651-2.651a1.25 1.25 0 0 1 1.768 0Zm.027 5.42H5.75a1.25 1.25 0 0 0-1.247 1.157l-.003.093v7.5c0 .66.51 1.2 1.157 1.247l.093.003h12.5a1.25 1.25 0 0 0 1.247-1.156l.003-.094v-7.5c0-.69-.56-1.25-1.25-1.25Zm-10 2.5c.69 0 1.25.56 1.25 1.25v1.25a1.25 1.25 0 0 1-2.5 0v-1.25c0-.69.56-1.25 1.25-1.25Zm7.5 0c.69 0 1.25.56 1.25 1.25v1.25a1.25 1.25 0 0 1-2.5 0v-1.25c0-.69.56-1.25 1.25-1.25Z' />
-                            </svg>视频教程</a>
-                        <a href="littleclicker/apk/LittleClicker.apk" target="_blank" class="project-card-btn">下载</a>
-                    </div>
-                </div>
+                <div class="notice-banner" id="dyn-notice-banner" style="display:none"></div>
+                <div class="welcome" id="dyn-greeting">你好，我是 <span class="gradientText">计堡</span>，很高兴认识你！</div>
+                <div id="dyn-descriptions"></div>
+                <div class="iconContainer" id="dyn-social-links"></div>
+                <div class="iconContainer" id="dyn-utility-buttons"></div>
+                <div class="skills-section" id="dyn-skills"></div>
+                <div id="dyn-projects-container"></div>
+                <div id="dyn-music-container">
                 <div class="music-player">
                     <div class="music-info">
-                        <div><span class="purpleText">十年</span>&nbsp;&nbsp;&nbsp;&nbsp;-陈奕迅</div>
-                        <div><span class="purpleText">成千上万个门口，总有一个人要先走。</span></div>
+                        <div><span class="purpleText" id="dyn-song-title">十年</span>&nbsp;&nbsp;&nbsp;&nbsp;-<span id="dyn-artist">陈奕迅</span></div>
+                        <div><span class="purpleText" id="dyn-lyric">成千上万个门口，总有一个人要先走。</span></div>
                     </div>
                     <div class="player-controls">
                         <button id="playPauseBtn" class="player-btn">
@@ -221,28 +79,18 @@
                     </div>
                     <audio id="musicPlayer" src="static/audio/陈奕迅-十年.mp3"></audio>
                 </div>
-
-                <!-- <div class="tanChiShe">
-                    <img id="tanChiShe" src="./static/svg/snake-Light.svg" alt="">
-                </div> -->
+                </div>
             </header>
-
-            <!-- Tab buttons -->
-
-
-            <footer>
-                © 2022-现在 &nbsp;&nbsp;|&nbsp;&nbsp;我没有项目，所以这里只有备案号
+            <footer id="dyn-footer">
+                &copy; 2022-现在 &nbsp;&nbsp;|&nbsp;&nbsp;我没有项目，所以这里只有备案号
                 <div>
                     <a href="https://beian.miit.gov.cn/" target="_blank">辽ICP备2026000346号</a> |
                     <a href="https://github.com/xxynet/HomePage" target="_blank" class="footer-links">SourceCode</a>
                 </div>
+                <div id="dyn-friend-links" style="margin-top:10px;font-size:12px"></div>
             </footer>
-
         </div>
     </div>
-    <!-- main结束 -->
-    <!--弹窗-->
-
     <div class="pop-up">
         <div class="pop-up-main">
             <img class="pop-up-img" src="" alt="" srcset="">
@@ -250,16 +98,481 @@
         <div onclick="PopUp()" class="pop-up-close">
             <svg t="1700047644371" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
                 p-id="950" width="19px" height="19px">
-                <path
-                    d="M610.616405 512.423878l391.647127 391.939565a68.722849 68.722849 0 0 1 0 98.332161 72.012772 72.012772 0 0 1-100.306115 0l-390.404267-391.354689-392.012675 391.28158a69.74638 69.74638 0 0 1-98.551489-98.551489l391.793346-391.720237L20.988986 119.533891A69.74638 69.74638 0 0 1 119.540475 20.982402l392.158893 392.451331L901.957417 23.248793a72.012772 72.012772 0 0 1 100.306115 0 68.722849 68.722849 0 0 1 0 98.332161L610.616405 512.423878z"
-                    p-id="951" fill="#000000"></path>
+                <path d="M610.616405 512.423878l391.647127 391.939565a68.722849 68.722849 0 0 1 0 98.332161 72.012772 72.012772 0 0 1-100.306115 0l-390.404267-391.354689-392.012675 391.28158a69.74638 69.74638 0 0 1-98.551489-98.551489l391.793346-391.720237L20.988986 119.533891A69.74638 69.74638 0 0 1 119.540475 20.982402l392.158893 392.451331L901.957417 23.248793a72.012772 72.012772 0 0 1 100.306115 0 68.722849 68.722849 0 0 1 0 98.332161L610.616405 512.423878z" p-id="951" fill="#000000"></path>
             </svg>
         </div>
     </div>
+    <!-- 项目详情弹窗 -->
+    <div class="project-modal" id="projectDetailModal" style="display:none;">
+        <div class="project-modal-overlay" onclick="closeProjectDetail()"></div>
+        <div class="project-modal-box">
+            <button class="project-modal-close" onclick="closeProjectDetail()">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            
+            <!-- 顶部封面区 -->
+            <div class="project-modal-cover">
+                <div class="project-modal-cover-bg"></div>
+                <div class="project-modal-info">
+                    <img class="project-modal-icon" id="modalProjectIcon" src="" alt="">
+                    <div class="project-modal-titles">
+                        <h2 class="project-modal-name" id="modalProjectTitle"></h2>
+                        <div class="project-modal-app" id="modalProjectName"></div>
+                    </div>
+                </div>
+            </div>
 
-    <script src="./static/js/script.js?v=1.33">
+            <!-- 内容区 -->
+            <div class="project-modal-body">
+                <!-- 简介 -->
+                <div class="project-modal-desc" id="modalProjectDesc"></div>
+
+                <!-- 技术栈 -->
+                <div class="project-modal-section" id="modalProjectTech" style="display:none;">
+                    <div class="section-label">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="16 18 22 12 16 6"></polyline>
+                            <polyline points="8 6 2 12 8 18"></polyline>
+                        </svg>
+                        <span id="labelTechStack">技术栈</span>
+                    </div>
+                    <div class="tech-tags" id="modalTechTags"></div>
+                </div>
+
+                <!-- 详细介绍 -->
+                <div class="project-modal-section" id="modalProjectDetail" style="display:none;">
+                    <div class="section-label">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                        </svg>
+                        <span id="labelProjectIntro">项目介绍</span>
+                    </div>
+                    <div class="detail-text" id="modalDetailText"></div>
+                </div>
+
+                <!-- 截图 -->
+                <div class="project-modal-section" id="modalScreenshots" style="display:none;">
+                    <div class="section-label">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                        <span id="labelScreenshots">项目截图</span>
+                    </div>
+                    <div class="screenshots-grid" id="modalScreenshotsGrid"></div>
+                </div>
+            </div>
+
+            <!-- 底部操作按钮 -->
+            <div class="project-modal-actions" id="modalProjectActions"></div>
+        </div>
+    </div>
+    <script src="./static/js/script.js?v=1.33"></script>
+    <script>
+    (function() {
+        var API = '/api';
+
+        // i18n Language Configuration
+        var i18n = {
+            zh: {
+                skills: '技能',
+                projects: '项目',
+                music: '音乐',
+                friends: '友情链接',
+                latestVersion: '最新版本',
+                videoTutorial: '视频教程',
+                download: '下载',
+                onlineDemo: '在线演示',
+                github: 'GitHub',
+                techStack: '技术栈',
+                projectIntro: '项目介绍',
+                screenshots: '项目截图',
+                noData: '暂无数据',
+                switchLang: '切换语言',
+                switchTheme: '切换主题',
+                notice: '公告'
+            },
+            en: {
+                skills: 'Skills',
+                projects: 'Projects',
+                music: 'Music',
+                friends: 'Friends',
+                latestVersion: 'Latest Version',
+                videoTutorial: 'Video Tutorial',
+                download: 'Download',
+                onlineDemo: 'Online Demo',
+                github: 'GitHub',
+                techStack: 'Tech Stack',
+                projectIntro: 'Project Introduction',
+                screenshots: 'Screenshots',
+                noData: 'No data yet',
+                switchLang: 'Switch Language',
+                switchTheme: 'Switch Theme',
+                notice: 'Notice'
+            }
+        };
+
+        // Get current language from localStorage
+        var currentLang = localStorage.getItem('lang') || 'zh';
+        window.t = function(key) {
+            return (i18n[currentLang] && i18n[currentLang][key]) || i18n.zh[key] || key;
+        };
+
+        // Language switch function
+        window.switchLang = function() {
+            var newLang = localStorage.getItem('lang') === 'zh' ? 'en' : 'zh';
+            localStorage.setItem('lang', newLang);
+            location.reload();
+        };
+
+        // Track visit
+        var vid = localStorage.getItem('_vid');
+        var today = new Date().toISOString().slice(0, 10);
+        var vidDate = localStorage.getItem('_vid_date');
+        var headers = {};
+        if (!vid || vidDate !== today) {
+            vid = Math.random().toString(36).slice(2) + Date.now().toString(36);
+            localStorage.setItem('_vid', vid);
+            localStorage.setItem('_vid_date', today);
+        } else {
+            headers['X-Visit-Id'] = vid;
+        }
+        fetch(API + '/track-visit', { method: 'POST', headers: headers }).catch(function(){});
+
+        fetch(API + '/homepage-data')
+            .then(function(r) { return r.json(); })
+            .then(function(res) {
+                if (res.code !== 200) return;
+                var d = res.data;
+                 var c = d.config || {};
+
+                // Store project data for detail modal
+                storeProjectData(d.projects);
+
+                // Meta
+                document.title = c.page_title || '你好，我是计堡';
+                var metaDesc = document.getElementById('dyn-meta-desc');
+                if (metaDesc) metaDesc.content = c.meta_description || '';
+                var metaKw = document.getElementById('dyn-meta-kw');
+                if (metaKw) metaKw.content = c.meta_keywords || '';
+
+                // Logo
+                var logo = document.getElementById('dyn-logo');
+                if (logo && c.avatar_url) logo.style.backgroundImage = 'url(' + c.avatar_url + ')';
+
+                // Location
+                var loc = document.getElementById('dyn-location');
+                if (loc) loc.textContent = c.location_label || 'Home';
+
+                // Greeting
+                var greet = document.getElementById('dyn-greeting');
+                if (greet) {
+                    var displayName = c.display_name || '计堡';
+                    if ((c.greeting_mode || 'custom') === 'simple') {
+                        greet.innerHTML = '你好，我是 <span class="gradientText">' + escHtml(displayName) + '</span>，很高兴认识你！';
+                    } else {
+                        var greetingHtml = c.greeting || '你好，我是 <span class="gradientText">计堡</span>';
+                        greetingHtml = greetingHtml.replace(/<span class="gradientText">[^<]*<\/span>/g, '<span class="gradientText">' + escHtml(displayName) + '</span>');
+                        greet.innerHTML = greetingHtml;
+                    }
+                }
+
+                // Notices banner
+                var nb = document.getElementById('dyn-notice-banner');
+                if (nb && d.appNotices) {
+                    var active = d.appNotices.filter(function(n) { return n.is_active; });
+                    if (active.length > 0) {
+                        var notice = active[0];
+                        var html = '';
+                        if (notice.image_url) {
+                            html += '<img src="' + notice.image_url + '" alt="" class="notice-image">';
+                        }
+                        html += '<div class="notice-content">' + escHtml(notice.content) + '</div>';
+                        if (notice.url && notice.url !== '1' && notice.url !== '#') {
+                            html = '<a href="' + notice.url + '" target="_blank" class="notice-link">' + html + '</a>';
+                        }
+                        nb.innerHTML = html;
+                        nb.style.display = 'flex';
+                    }
+                }
+
+                // Tags
+                var tagsEl = document.getElementById('dyn-tags');
+                if (tagsEl && d.tags) {
+                    tagsEl.innerHTML = d.tags.map(function(t) { return '<div class="left-tag-item">' + escHtml(t.tag) + '</div>'; }).join('');
+                }
+
+                // Theme: apply server default if no cookie override
+                if (!document.cookie.match(/themeState=([^;]+)/) && c.theme) {
+                    document.documentElement.setAttribute('data-theme', c.theme);
+                }
+
+                // Timeline
+                var tlEl = document.getElementById('dyn-timeline');
+                if (tlEl && d.timeline) {
+                    tlEl.innerHTML = d.timeline.map(function(t) {
+                        var focusClass = t.is_current ? ' focus current' : ' focus';
+                        return '<li><div class="' + focusClass + '"></div><div>' + escHtml(t.date) + '</div><div>' + t.content + '</div></li>';
+                    }).join('');
+                }
+
+                // Descriptions
+                var descEl = document.getElementById('dyn-descriptions');
+                if (descEl && c.descriptions) {
+                    try {
+                        var descs = JSON.parse(c.descriptions);
+                        descEl.innerHTML = descs.map(function(d) {
+                            var iconHtml = d.icon ? '<img src="' + d.icon + '" alt="" width="16" height="16"> ' : '';
+                            return '<div class="description">' + iconHtml + (d.text || '') + '</div>';
+                        }).join('');
+                    } catch(e) {}
+                }
+
+                // Social links
+                var slEl = document.getElementById('dyn-social-links');
+                if (slEl && d.socialLinks) {
+                    var linksHtml = '';
+                    d.socialLinks.forEach(function(l) {
+                        if (!l.is_active) return;
+                        var tipHtml = l.tip_text ? '<div class="iconTip">' + escHtml(l.tip_text) + '</div>' : '';
+                        var svg = getPlatformSvg(l.platform);
+                        linksHtml += '<a class="' + l.display_style + '" target="_blank" href="' + l.url + '">' + svg + tipHtml + '</a>';
+                    });
+                    slEl.innerHTML = linksHtml;
+                }
+
+                // Utility buttons (theme + language)
+                var utilContainer = document.getElementById('dyn-utility-buttons');
+                if (utilContainer) {
+                    var utilHtml = '';
+                    // Theme cycle button
+                    utilHtml += '<a class="iconItem switch" href="javascript:void(0)" onclick="cycleTheme()" title="' + t('switchTheme') + '">' +
+                      '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>' +
+                      '</a>';
+                    // Language switch button
+                    utilHtml += '<a class="iconItem switch" href="javascript:void(0)" onclick="switchLang()" title="' + t('switchLang') + '">' +
+                      '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 5h7M2 5c0 5.5 3.8 10 7 10M2 5l5 10M9 5h7M9 5c0 5.5 3.8 10 7 10M9 5l5 10M16 5h6"/><path d="M19 2v6M16 5h6"/></svg>' +
+                      '</a>';
+                    utilContainer.innerHTML = utilHtml;
+                }
+
+                // Skills
+                var skEl = document.getElementById('dyn-skills');
+                if (skEl && d.skills && d.skills.length) {
+                    var skillsHtml = '<div class="section-title">' + t('skills') + '</div>';
+                    d.skills.forEach(function(s) {
+                        var pct = s.level || 80;
+                        skillsHtml += '<div class="skill-item">' +
+                            '<div class="skill-info"><span class="skill-name">' + escHtml(s.name) + '</span><span class="skill-pct">' + pct + '%</span></div>' +
+                            '<div class="skill-bar"><div class="skill-fill" style="width:' + pct + '%;background:' + (s.color || '#6366f1') + '"></div></div>' +
+                            '</div>';
+                    });
+                    skEl.innerHTML = skillsHtml;
+                }
+
+                // Projects
+                var pc = document.getElementById('dyn-projects-container');
+                if (pc && d.projects && d.projects.length) {
+                    var projectsHtml = '';
+                    d.projects.forEach(function(p) {
+                        projectsHtml += '<div class="project-card-header">' + escHtml(p.title || '') + '</div>' +
+                            '<div class="project-card" onclick="showProjectDetail(' + p.id + ')" style="cursor:pointer">' +
+                            '<div class="project-card-icon"><img src="' + (p.app_icon || '') + '" alt=""></div>' +
+                            '<div class="project-card-content">' +
+                            '<div class="project-card-title">' + escHtml(p.app_name || '') + '</div>' +
+                            '<div class="project-card-desc">' + escHtml(p.app_description || '') + '</div>';
+                        // Latest version info
+                        if (d.appVersions && d.appVersions.length) {
+                            var lv = d.appVersions[0];
+                            projectsHtml += '<div class="version-tag">' + t('latestVersion') + ' v' + escHtml(lv.version_code) + '</div>';
+                        }
+                        projectsHtml +=
+                            (p.video_url ? '<a href="' + p.video_url + '" target="_blank" class="project-card-btn" style="background:transparent;color:#ff69b4;border:2px solid #ff69b4;margin-bottom:8px;"><svg viewBox="0 0 24 24" width="1.2em" height="1.2em"><path fill="currentColor" d="M18.223 3.086a1.25 1.25 0 0 1 0 1.768L17.08 5.996h1.17A3.75 3.75 0 0 1 22 9.746v7.5a3.75 3.75 0 0 1-3.75 3.75H5.75A3.75 3.75 0 0 1 2 17.246v-7.5a3.75 3.75 0 0 1 3.75-3.75h1.166L5.775 4.855a1.25 1.25 0 0 1 1.767-1.768l2.652 2.651c.079.08.145.166.198.258h3.213c.053-.092.12-.18.199-.259l2.651-2.651a1.25 1.25 0 0 1 1.768 0Zm.027 5.42H5.75a1.25 1.25 0 0 0-1.247 1.157l-.003.093v7.5c0 .66.51 1.2 1.157 1.247l.093.003h12.5a1.25 1.25 0 0 0 1.247-1.156l.003-.094v-7.5c0-.69-.56-1.25-1.25-1.25Zm-10 2.5c.69 0 1.25.56 1.25 1.25v1.25a1.25 1.25 0 0 1-2.5 0v-1.25c0-.69.56-1.25 1.25-1.25Zm7.5 0c.69 0 1.25.56 1.25 1.25v1.25a1.25 1.25 0 0 1-2.5 0v-1.25c0-.69.56-1.25 1.25-1.25Z"/></svg>' + t('videoTutorial') + '</a>' : '') +
+                            '<a href="' + (p.download_url || '#') + '" target="_blank" class="project-card-btn">' + escHtml(p.download_text || t('download')) + '</a>' +
+                            '</div></div>';
+                    });
+                    pc.innerHTML = projectsHtml;
+                }
+
+                // Music
+                var mc = document.getElementById('dyn-music-container');
+                if (mc && d.music && d.music.length) {
+                    var first = d.music[0];
+                    var st = document.getElementById('dyn-song-title');
+                    if (st) st.textContent = first.song_title || '';
+                    var ar = document.getElementById('dyn-artist');
+                    if (ar) ar.textContent = first.artist || '';
+                    var ly = document.getElementById('dyn-lyric');
+                    if (ly) ly.textContent = first.lyric_snippet || '';
+                    var mp = document.getElementById('musicPlayer');
+                    if (mp && first.audio_file) mp.src = first.audio_file;
+
+                    if (d.music.length > 1) {
+                        var listHtml = '<div style="margin-top:12px;font-size:12px;color:var(--text-secondary);">更多歌曲：';
+                        for (var i = 1; i < d.music.length; i++) {
+                            listHtml += '<span style="margin:0 4px">' + escHtml(d.music[i].song_title) + ' - ' + escHtml(d.music[i].artist) + '</span>';
+                            if (i < d.music.length - 1) listHtml += ' | ';
+                        }
+                        listHtml += '</div>';
+                        mc.innerHTML += listHtml;
+                    }
+                }
+
+                // Footer
+                var footer = document.getElementById('dyn-footer');
+                if (footer) {
+                    footer.innerHTML = c.footer_copyright + ' &nbsp;&nbsp;|&nbsp;&nbsp;' + escHtml(c.footer_slogan || '') +
+                        '<div><a href="' + (c.footer_icp_url || '#') + '" target="_blank">' + escHtml(c.footer_icp_number || '') + '</a> | ' +
+                        '<a href="' + (c.footer_source_code_url || '#') + '" target="_blank" class="footer-links">' + escHtml(c.footer_source_code_label || 'SourceCode') + '</a></div>' +
+                        ((d.friendLinks || []).length > 0 ? '<div style="margin-top:10px;font-size:12px">' +
+                            d.friendLinks.map(function(l) { return '<a href="' + l.url + '" target="_blank" title="' + escHtml(l.description||'') + '">' + escHtml(l.name) + '</a>'; }).join(' &nbsp;|&nbsp; ') +
+                        '</div>' : '');
+                }
+            })
+            .catch(function(e) { console.error('Failed to load homepage data:', e); });
+
+        function apiFetch(url, opts) {
+            opts = opts || {};
+            opts.headers = opts.headers || {};
+            opts.headers['Content-Type'] = opts.headers['Content-Type'] || 'application/json';
+            return fetch(url, opts);
+        }
+
+        function escHtml(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+        function getPlatformSvg(platform) {
+            var svgs = {
+                'GitHub': '<svg t="1704870335945" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2487" width="22px" height="22px"><path d="M511.6 76.3C264.3 76.2 64 276.4 64 523.5 64 718.9 189.3 885 363.8 946c23.5 5.9 19.9-10.8 19.9-22.2v-77.5c-135.7 15.9-141.2-73.9-150.3-88.9C215 726 171.5 718 184.5 703c30.9-15.9 62.4 4 98.9 57.9 26.4 39.1 77.9 32.5 104 26 5.7-23.5 17.9-44.5 34.7-60.8-140.6-25.2-199.2-111-199.2-213 0-49.5 16.3-95 48.3-131.7-20.4-60.5 1.9-112.3 4.9-120 58.1-5.2 118.5 41.6 123.2 45.3 33-8.9 70.7-13.6 112.9-13.6 42.4 0 80.2 4.9 113.5 13.9 11.3-8.6 67.3-48.8 121.3-43.9 2.9 7.7 24.7 58.3 5.5 118 32.4 36.8 48.9 82.7 48.9 132.3 0 102.2-59 188.1-200 212.9 23.5 23.2 38.1 55.4 38.1 91v112.5c0.8 9 0 17.9 15 17.9 177.1-59.7 304.6-227 304.6-424.1 0-247.2-200.4-447.3-447.5-447.3z" fill="#000000" p-id="2488"></path></svg>',
+                'Bilibili': '<svg viewBox="0 0 24 24" width="1.2em" height="1.2em" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M18.223 3.086a1.25 1.25 0 0 1 0 1.768L17.08 5.996h1.17A3.75 3.75 0 0 1 22 9.746v7.5a3.75 3.75 0 0 1-3.75 3.75H5.75A3.75 3.75 0 0 1 2 17.246v-7.5a3.75 3.75 0 0 1 3.75-3.75h1.166L5.775 4.855a1.25 1.25 0 0 1 1.767-1.768l2.652 2.651c.079.08.145.166.198.258h3.213c.053-.092.12-.18.199-.259l2.651-2.651a1.25 1.25 0 0 1 1.768 0Zm.027 5.42H5.75a1.25 1.25 0 0 0-1.247 1.157l-.003.093v7.5c0 .66.51 1.2 1.157 1.247l.093.003h12.5a1.25 1.25 0 0 0 1.247-1.156l.003-.094v-7.5c0-.69-.56-1.25-1.25-1.25Zm-10 2.5c.69 0 1.25.56 1.25 1.25v1.25a1.25 1.25 0 0 1-2.5 0v-1.25c0-.69.56-1.25 1.25-1.25Zm7.5 0c.69 0 1.25.56 1.25 1.25v1.25a1.25 1.25 0 0 1-2.5 0v-1.25c0-.69.56-1.25 1.25-1.25Z" /></svg>',
+                'QQ': '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="buslogo-qq"><path id="fill1" d="M20.2145 14.6548C20.0273 14.0523 19.7714 13.3498 19.513 12.675L18.5692 10.3156C18.5692 10.2884 18.5818 9.82435 18.5818 9.58475C18.5818 5.55233 16.6781 1.50052 11.9971 1.5C7.3161 1.49948 5.41184 5.55233 5.41184 9.58475C5.41184 9.82383 5.42389 10.2884 5.42442 10.3156L4.48067 12.675C4.22167 13.3498 3.96633 14.0523 3.77916 14.6548C2.88784 17.5279 3.17568 18.717 3.39589 18.7443C3.86776 18.8015 5.23567 16.581 5.23567 16.581C5.23567 17.8666 5.89734 19.5444 7.32921 20.7561C6.7939 20.9212 6.13747 21.1755 5.71541 21.4864C5.33633 21.7664 5.38352 22.0516 5.45325 22.168C5.75368 22.6745 10.6009 22.4915 12.0002 22.3337C13.3996 22.491 18.2468 22.6745 18.5467 22.168C18.6148 22.0527 18.662 21.7674 18.2845 21.4864C17.8651 21.175 17.2055 20.9207 16.6697 20.7555C18.1015 19.5444 18.7632 17.8666 18.7632 16.581C18.7632 16.581 20.1306 18.8015 20.603 18.7443C20.8195 18.7181 21.1089 17.529 20.2145 14.6548Z" fill="transparent" /><path id="stroke1" d="M20.2145 14.6548C20.0273 14.0523 19.7714 13.3498 19.513 12.675L18.5692 10.3156C18.5692 10.2884 18.5818 9.82435 18.5818 9.58475C18.5818 5.55233 16.6781 1.50052 11.9971 1.5C7.3161 1.49948 5.41184 5.55233 5.41184 9.58475C5.41184 9.82383 5.42389 10.2884 5.42442 10.3156L4.48067 12.675C4.22167 13.3498 3.96633 14.0523 3.77916 14.6548C2.88784 17.5279 3.17568 18.717 3.39589 18.7443C3.86776 18.8015 5.23567 16.581 5.23567 16.581C5.23567 17.8666 5.89734 19.5444 7.32921 20.7561C6.7939 20.9212 6.13747 21.1755 5.71541 21.4864C5.33633 21.7664 5.38352 22.0516 5.45325 22.168C5.75368 22.6745 10.6009 22.4915 12.0002 22.3337C13.3996 22.491 18.2468 22.6745 18.5467 22.168C18.6148 22.0527 18.662 21.7674 18.2845 21.4864C17.8651 21.175 17.2055 20.9207 16.6697 20.7555C18.1015 19.5444 18.7632 17.8666 18.7632 16.581C18.7632 16.581 20.1306 18.8015 20.603 18.7443C20.8195 18.7181 21.1089 17.529 20.2145 14.6548Z" stroke-width="2" stroke="currentColor" /></g></svg>',
+                'Email': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 4l-8 5l-8-5V6l8 5l8-5z" /></svg>'
+            };
+            return svgs[platform] || svgs['GitHub'];
+        }
+
+        // Project Detail Modal
+        var _projectData = [];
+        var _allProjects = [];
+
+        // Store project data when loading
+        window.storeProjectData = function(projects) {
+            _allProjects = projects || [];
+        };
+
+        window.showProjectDetail = function(projectId) {
+            var p = _allProjects.find(function(item) { return item.id === projectId; });
+            if (!p) return;
+
+            // Update modal labels with i18n
+            var techLabel = document.getElementById('labelTechStack');
+            if (techLabel) techLabel.textContent = t('techStack');
+            var detailLabel = document.getElementById('labelProjectIntro');
+            if (detailLabel) detailLabel.textContent = t('projectIntro');
+            var screenshotsLabel = document.getElementById('labelScreenshots');
+            if (screenshotsLabel) screenshotsLabel.textContent = t('screenshots');
+
+            // Set icon and title
+            var iconEl = document.getElementById('modalProjectIcon');
+            if (iconEl) iconEl.src = p.app_icon || '';
+
+            var titleEl = document.getElementById('modalProjectTitle');
+            if (titleEl) titleEl.textContent = p.title || '';
+
+            var nameEl = document.getElementById('modalProjectName');
+            if (nameEl) nameEl.textContent = p.app_name || '';
+
+            var descEl = document.getElementById('modalProjectDesc');
+            if (descEl) descEl.textContent = p.app_description || '';
+
+            // Tech stack
+            var techContainer = document.getElementById('modalProjectTech');
+            var techTags = document.getElementById('modalTechTags');
+            if (techContainer && techTags) {
+                if (p.tech_stack) {
+                    techContainer.style.display = 'block';
+                    var tags = p.tech_stack.split(',').map(function(s) { return s.trim(); }).filter(function(s) { return s; });
+                    techTags.innerHTML = tags.map(function(tag) { return '<span class="tech-tag">' + escHtml(tag) + '</span>'; }).join('');
+                } else {
+                    techContainer.style.display = 'none';
+                }
+            }
+
+            // Detail description
+            var detailContainer = document.getElementById('modalProjectDetail');
+            var detailText = document.getElementById('modalDetailText');
+            if (detailContainer && detailText) {
+                if (p.detail_description) {
+                    detailContainer.style.display = 'block';
+                    detailText.textContent = p.detail_description;
+                } else {
+                    detailContainer.style.display = 'none';
+                }
+            }
+
+            // Screenshots
+            var screenshotsContainer = document.getElementById('modalScreenshots');
+            var screenshotsGrid = document.getElementById('modalScreenshotsGrid');
+            if (screenshotsContainer && screenshotsGrid) {
+                if (p.screenshots) {
+                    screenshotsContainer.style.display = 'block';
+                    var imgs = p.screenshots.split(',').map(function(s) { return s.trim(); }).filter(function(s) { return s; });
+                    screenshotsGrid.innerHTML = imgs.map(function(url) {
+                        return '<img class="screenshot-img" src="' + escHtml(url) + '" alt="' + t('screenshots') + '" onclick="window.open(this.src)">';
+                    }).join('');
+                } else {
+                    screenshotsContainer.style.display = 'none';
+                }
+            }
+
+            // Action buttons
+            var actionsEl = document.getElementById('modalProjectActions');
+            if (actionsEl) {
+                var actionsHtml = '';
+                if (p.github_url) {
+                    actionsHtml += '<a href="' + p.github_url + '" target="_blank" class="project-modal-btn btn-github"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> ' + t('github') + '</a>';
+                }
+                if (p.demo_url) {
+                    actionsHtml += '<a href="' + p.demo_url + '" target="_blank" class="project-modal-btn btn-demo">' + t('onlineDemo') + '</a>';
+                }
+                if (p.video_url) {
+                    actionsHtml += '<a href="' + p.video_url + '" target="_blank" class="project-modal-btn btn-video"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> ' + t('videoTutorial') + '</a>';
+                }
+                if (p.download_url) {
+                    actionsHtml += '<a href="' + p.download_url + '" target="_blank" class="project-modal-btn btn-download">' + escHtml(p.download_text || t('download')) + '</a>';
+                }
+                actionsEl.innerHTML = actionsHtml;
+            }
+
+            // Show modal
+            var modal = document.getElementById('projectDetailModal');
+            if (modal) {
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        window.closeProjectDetail = function() {
+            var modal = document.getElementById('projectDetailModal');
+            if (modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeProjectDetail();
+            }
+        });
+    })();
     </script>
-
 </body>
-
 </html>
