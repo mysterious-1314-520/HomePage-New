@@ -1,0 +1,28 @@
+documentation:
+  - changed-files:
+      - any-glob-to-any-file: ['*.md', 'docs/**']
+  - head-branch: ['^docs/', '^documentation/']
+
+backend:
+  - changed-files:
+      - any-glob-to-any-file: ['server/**', 'admin/server.js']
+
+frontend:
+  - changed-files:
+      - any-glob-to-any-file: ['index.html', 'admin/index.html', 'static/**']
+
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file: ['package.json', 'package-lock.json', '**/package.json']
+
+docker:
+  - changed-files:
+      - any-glob-to-any-file: ['Dockerfile', 'docker-compose.yml', '.dockerignore']
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file: ['.github/workflows/**']
+
+config:
+  - changed-files:
+      - any-glob-to-any-file: ['.*', '.vscode/**', '.editorconfig']

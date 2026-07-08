@@ -60,6 +60,15 @@
 
 ## 快速开始
 
+更多说明请查看：
+
+- [配置说明](docs/CONFIGURATION.md)
+- [开发指南](docs/DEVELOPMENT.md)
+- [API 文档](docs/API.md)
+- [部署指南](docs/DEPLOYMENT.md)
+- [排错指南](docs/TROUBLESHOOTING.md)
+- [架构说明](docs/ARCHITECTURE.md)
+
 ### 安装依赖
 
 ```bash

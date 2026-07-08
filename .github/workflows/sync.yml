@@ -1,0 +1,23 @@
+name: Sync to Gitee
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 6 * * 6'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    if: ${{ vars.GITEE_TOKEN != '' }}
+    steps:
+      - name: Sync to Gitee
+        uses: Yikun/hub-mirror-action@master
+        with:
+          src: github/mysterious-1314-520
+          dst: gitee/mysterious-1314-520
+          dst_key: ${{ secrets.GITEE_SSH_PRIVATE_KEY }}
+          dst_token: ${{ secrets.GITEE_TOKEN }}
+          force_update: true
+          mappings: 'HomePage-New=>HomePage-New'
+          debug: true

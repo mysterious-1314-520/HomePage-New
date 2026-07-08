@@ -1,0 +1,33 @@
+name: 配置问题
+description: 报告部署、环境变量、运行配置相关问题
+title: "[Config] "
+labels: [configuration]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: 项目版本
+      placeholder: v1.0.0 或 commit hash
+  - type: dropdown
+    id: runtime
+    attributes:
+      label: 运行方式
+      options:
+        - 本地 Node.js
+        - Docker Compose
+        - Docker
+        - 其他
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: 问题描述
+      description: 描述配置问题、实际表现和期望表现。
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: 相关日志
+      render: shell
