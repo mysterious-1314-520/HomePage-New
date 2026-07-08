@@ -1,14 +1,46 @@
-.env
+# 依赖
 node_modules/
+server/node_modules/
+admin/node_modules/
+
+# 环境变量
+.env
+.env.local
+.env.*.local
+
+# 数据库
 data/*.db
 data/*.db-journal
+data/*.db-wal
+data/*.db-shm
+
+# 上传文件
 static/uploads/*
 !static/uploads/.gitkeep
+
+# 日志
 *.log
+logs/
+runtime/
+
+# 系统文件
 .DS_Store
 Thumbs.db
+Desktop.ini
+
+# 编辑器
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
+
+# 构建产物
+dist/
+build/
+cache/
+
+# 临时文件
+*.tmp
+*.temp
+*.bak
