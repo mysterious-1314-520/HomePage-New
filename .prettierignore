@@ -1,0 +1,8 @@
+node_modules/
+static/
+*.min.js
+*.min.css
+admin/index.html
+index.html
+package-lock.json
+yarn.lock

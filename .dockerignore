@@ -1,0 +1,11 @@
+node_modules
+.git
+.github
+data
+*.log
+*.md
+Dockerfile
+docker-compose.yml
+.env
+.env.example
+.vscode

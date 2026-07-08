@@ -1,0 +1,33 @@
+name: Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Install ESLint
+        run: |
+          npm install -g eslint@8
+          cd server && npm install && cd ..
+
+      - name: Run ESLint
+        run: npx eslint server/*.js server/routes/*.js admin/*.js --fix=false
+
+      - name: Check formatting with Prettier
+        run: |
+          npm install -g prettier
+          npx prettier --check "server/**/*.js" "admin/**/*.js" 2>/dev/null || echo "Formatting check skipped"

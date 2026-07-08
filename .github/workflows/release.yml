@@ -1,0 +1,52 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Extract version
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.VERSION }}
+          name: Release ${{ steps.version.outputs.VERSION }}
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+          body: |
+            ## HomePage ${{ steps.version.outputs.VERSION }}
+
+            ### 安装
+            ```bash
+            git clone https://github.com/mysterious-1314-520/HomePage-New.git
+            cd HomePage-New
+            cd server && npm install && cd ..
+            ./start.sh
+            ```
+
+            ### Docker
+            ```bash
+            docker-compose up -d
+            ```
+
+            ### 变更内容
+            请查看 [CHANGELOG.md](CHANGELOG.md) 获取详细变更信息。

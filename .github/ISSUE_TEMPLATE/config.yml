@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 问题讨论
+    url: https://github.com/mysterious-1314-520/HomePage-New/discussions
+    about: 请在这里进行问题讨论和提问
+  - name: 安全漏洞
+    url: https://github.com/mysterious-1314-520/HomePage-New/security/policy
+    about: 请查看安全政策了解如何报告安全漏洞

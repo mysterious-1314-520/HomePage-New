@@ -1,5 +1,11 @@
 # HomePage - 计堡个人主页
 
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Node](https://img.shields.io/badge/node-%3E%3D16-green.svg)
+![Version](https://img.shields.io/badge/version-1.0.0-brightgreen.svg)
+![CI](https://img.shields.io/github/actions/workflow/status/mysterious-1314-520/HomePage-New/node.js.yml)
+![Stars](https://img.shields.io/github/stars/mysterious-1314-520/HomePage-New)
+
 一个功能完整的个人主页系统，包含动态主页展示和后台管理功能。
 
 ## 功能特性

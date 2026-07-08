@@ -9,7 +9,15 @@
     "server": "cd server && npm start",
     "admin": "cd admin && npm start",
     "docker:up": "docker-compose up -d",
-    "docker:down": "docker-compose down"
+    "docker:down": "docker-compose down",
+    "lint": "npx eslint server/*.js server/routes/*.js admin/*.js",
+    "lint:fix": "npx eslint server/*.js server/routes/*.js admin/*.js --fix",
+    "format": "npx prettier --write \"server/**/*.js\" \"admin/**/*.js\"",
+    "format:check": "npx prettier --check \"server/**/*.js\" \"admin/**/*.js\""
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "prettier": "^3.3.0"
   },
   "keywords": [
     "homepage",
