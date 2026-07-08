@@ -104,9 +104,34 @@ HomePage/
 
 ## 配置说明
 
+### 环境变量
+
+复制 `.env.example` 为 `.env` 并根据需要修改配置：
+
+| 变量名 | 默认值 | 说明 |
+|--------|--------|------|
+| PORT | 4000 | 服务器端口 |
+| DB_PATH | ./data/homepage.db | 数据库路径 |
+| UPLOAD_DIR | ./static/uploads | 上传文件目录 |
+| MAX_FILE_SIZE | 10485760 | 最大文件大小(字节) |
+| ADMIN_PASSWORD | admin123 | 管理员密码 |
+
 ### 数据库
 
 使用 SQLite 数据库，首次启动会自动创建并初始化种子数据。
+
+### Docker 部署
+
+```bash
+# 启动服务
+docker-compose up -d
+
+# 查看日志
+docker-compose logs -f
+
+# 停止服务
+docker-compose down
+```
 
 ### 主题配置
 

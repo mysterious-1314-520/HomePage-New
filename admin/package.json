@@ -1,0 +1,12 @@
+{
+  "name": "homepage-admin",
+  "version": "1.0.0",
+  "description": "计堡个人主页后台管理",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "author": "计堡",
+  "license": "MIT"
+}
