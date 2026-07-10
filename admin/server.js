@@ -2,9 +2,11 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const PORT = 4001;
+const PORT = process.env.PORT || 4001;
 const ADMIN_DIR = __dirname;
-const API_TARGET = { hostname: '127.0.0.1', port: 4000 };
+const API_HOST = process.env.API_HOST || '127.0.0.1';
+const API_PORT = process.env.API_PORT || 4000;
+const API_TARGET = { hostname: API_HOST, port: API_PORT };
 
 const MIME = {
   '.html': 'text/html; charset=utf-8',
@@ -41,7 +43,7 @@ function proxyApi(req, res) {
     port: API_TARGET.port,
     path: req.url,
     method: req.method,
-    headers: { ...req.headers, host: '127.0.0.1:4000' }
+    headers: { ...req.headers, host: `${API_HOST}:${API_PORT}` }
   };
   const pr = http.request(opt, (pRes) => {
     res.writeHead(pRes.statusCode, { 'content-type': pRes.headers['content-type'] || 'application/json' });

@@ -1,0 +1,21 @@
+FROM node:18-alpine
+
+LABEL maintainer="计堡"
+LABEL description="HomePage - 后台管理服务"
+
+WORKDIR /app
+
+COPY admin/package.json ./admin/
+
+RUN cd admin && npm install --production && cd ..
+
+COPY admin ./admin
+
+EXPOSE 4001
+
+ENV NODE_ENV=production
+ENV PORT=4001
+ENV API_HOST=homepage-server
+ENV API_PORT=4000
+
+CMD ["node", "admin/server.js"]

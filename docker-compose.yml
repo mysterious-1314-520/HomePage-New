@@ -1,27 +1,36 @@
 version: '3.8'
 
 services:
-  homepage:
-    image: node:18-alpine
-    container_name: homepage
-    working_dir: /app
+  homepage-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    container_name: homepage-server
+    restart: unless-stopped
     volumes:
-      - .:/app
       - homepage-data:/app/data
       - homepage-uploads:/app/static/uploads
     ports:
       - "4000:4000"
-      - "4001:4001"
     environment:
       - PORT=4000
       - NODE_ENV=production
-    command: >
-      sh -c "cd server && npm install && cd .. &&
-             cd admin && npm install && cd .. &&
-             node server/index.js &
-             node admin/server.js &
-             wait"
+
+  homepage-admin:
+    build:
+      context: .
+      dockerfile: Dockerfile.admin
+    container_name: homepage-admin
     restart: unless-stopped
+    ports:
+      - "4001:4001"
+    environment:
+      - PORT=4001
+      - API_HOST=homepage-server
+      - API_PORT=4000
+      - NODE_ENV=production
+    depends_on:
+      - homepage-server
 
 volumes:
   homepage-data:
